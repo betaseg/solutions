@@ -1,9 +1,9 @@
 module.exports = {
   pathPrefix: `/solutions`,
   siteMetadata: {
-    title: 'album catalog',
-    subtitle: 'sharing favourite solutions across tools and domains',
-    catalog_url: 'https://gitlab.com/album-app/catalogs/templates/catalog-gatsby',
+    title: 'BetaSeg Solutions',
+    subtitle: 'Segmenting, analyzing and visualizing volumetric Electron Microscopy datasets',
+    catalog_url: 'https://github.com/betaseg/solutions',
     menuLinks:[
       {
          name:'Catalog',
