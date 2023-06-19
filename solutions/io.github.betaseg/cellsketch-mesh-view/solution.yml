@@ -1,0 +1,33 @@
+album_api_version: 0.5.3
+args:
+- description: The CellSketch project (ends with .n5)
+  name: project
+  required: true
+  type: directory
+- description: List of names of elements which should be loaded, comma separated
+  name: include
+  required: false
+  type: string
+- description: List of names of elements which should not be loaded, comma separated
+  name: exclude
+  required: false
+  type: string
+changelog: '- initial release
+
+  '
+covers:
+- description: Screenshot of a raw image next to the mesh generated from it and displayed
+    using vtkplotlib.
+  source: cover.png
+description: Displays all exported meshes from a CellSketch project using vtkplotlib.
+  Colors can be adjusted in the CellSketch BigDataViewer app.
+group: io.github.betaseg
+name: cellsketch-mesh-view
+solution_creators:
+- Deborah Schmidt
+tags:
+- mesh
+- cellsketch
+timestamp: '2023-06-19T09:58:34.461175'
+title: 'CellSketch: Display exported meshes'
+version: 0.1.0
