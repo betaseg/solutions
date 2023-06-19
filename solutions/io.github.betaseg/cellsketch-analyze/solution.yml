@@ -1,0 +1,43 @@
+album_api_version: 0.5.5
+args:
+- description: The CellSketch project to be opened (.n5).
+  name: project
+  required: true
+  type: directory
+- description: "Max distance between two connected organelles in \u03BCm."
+  name: connected_threshold_in_um
+  required: true
+  type: float
+- default: false
+  description: Do not recalculate existing distance transform maps.
+  name: skip_existing_distance_maps
+  type: boolean
+changelog: null
+cite:
+- doi: https://doi.org/10.1083/jcb.202010039
+  text: "A. M\xFCller, D. Schmidt, C. S. Xu, S. Pang, J. V. D\u2019Costa, S. Kretschmar,\
+    \ C. M\xFCnster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D FIB-SEM\
+    \ reconstruction of microtubule\u2013organelle interaction in whole primary mouse\
+    \ \u03B2 cells. J Cell Biol 1 February 2021; 220 (2): e202010039."
+- doi: 10.1038/nmeth.3392
+  text: "Pietzsch, T., Saalfeld, S., Preibisch, S., & Tomancak, P. (2015). BigDataViewer:\
+    \ visualization and processing for large image data sets. Nature Methods, 12(6),\
+    \ 481\u2013483."
+covers:
+- description: TODO
+  source: cover.png
+description: This solution performs spatial analysis for all organelles in a CellSketch
+  project.
+group: io.github.betaseg
+name: cellsketch-analyze
+solution_creators:
+- Deborah Schmidt
+tags:
+- bdv
+- cellsketch
+- segmentation
+- annotation
+- analysis
+timestamp: '2023-06-19T09:55:24.459260'
+title: 'CellSketch: Run spatial analysis'
+version: 0.1.0
