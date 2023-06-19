@@ -1,0 +1,34 @@
+album_api_version: 0.5.5
+args:
+- description: The CellSketch project (ends with .n5)
+  name: project
+  required: true
+  type: directory
+- description: List of names of elements which should be loaded, comma separated
+  name: include
+  required: false
+  type: string
+- description: List of names of elements which should not be loaded, comma separated
+  name: exclude
+  required: false
+  type: string
+- description: Do not display mesh after processing it. Set this to true if you run
+    into memory issues.
+  name: headless
+  type: boolean
+changelog: '- initial release
+
+  '
+covers:
+- description: Screenshot of a raw image next to the mesh generated from it and displayed
+    using vtkplotlib.
+  source: cover.png
+description: VTK based mesh generation from pixel data, exports all masks and labelmaps
+  from CellSketch project as meshes.
+group: io.github.betaseg
+name: cellsketch-mesh-export
+solution_creators:
+- Deborah Schmidt
+timestamp: '2023-06-19T09:58:07.275117'
+title: 'CellSketch: Export masks and labelmaps as meshes'
+version: 0.1.0
