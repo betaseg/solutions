@@ -1,0 +1,33 @@
+album_api_version: 0.5.5
+args:
+- description: Input file
+  name: fname_input
+  required: true
+- description: Input model
+  name: model_name
+  required: true
+- description: Path to the model directory
+  name: model_basedir
+  required: true
+- description: Path to the output directory
+  name: output_dir
+  required: true
+- default: None
+  description: 'Number of tiles per dimension. '
+  name: n_tiles
+  required: false
+  type: string
+changelog: null
+cite: []
+description: An album solution to run stardist to predict 3D segmentation masks.
+group: io.github.betaseg
+license: unlicense
+name: stardist_predict
+solution_creators:
+- Jan Philipp Albrecht
+tags:
+- stardist_train
+- machine learning
+timestamp: '2023-06-21T15:37:36.694918'
+title: stardist_predict
+version: 0.1.0
