@@ -66,13 +66,23 @@ setup(
     group="io.github.betaseg",
     name="stardist_predict",
     version="0.1.0",
-    title="stardist_predict",
+    title="StarDist Predict",
     description="An album solution to run stardist to predict 3D segmentation masks.",
     solution_creators=["Jan Philipp Albrecht"],
-    cite=[],
-    tags=["stardist_train", "machine learning"],
+    cite=[{
+        "text": "Uwe Schmidt and Martin Weigert and Coleman Broaddus and Gene Myers, Cell Detection with Star-Convex Polygons, International Conference on Medical Image Computing and Computer-Assisted Intervention (MICCAI), Granada, Spain, September 2018",
+        "doi": "10.1007/978-3-030-00934-2_30"
+    }, {
+        "text": "Martin Weigert and Uwe Schmidt and Robert Haase and Ko Sugawara and Gene Myers, Star-convex Polyhedra for 3D Object Detection and Segmentation in Microscopy, IEEE Winter Conference on Applications of Computer Vision (WACV), March 2020",
+        "doi": "10.1109/WACV45572.2020.9093435"
+    }],
+    tags=["StarDist", "machine learning"],
     license="unlicense",
     album_api_version="0.5.5",
+    covers=[{
+        "description": "StarDist Predict Cover Image",
+        "source": "cover.jpg"
+    }],
     args=[
         {
             "name": "fname_input",
