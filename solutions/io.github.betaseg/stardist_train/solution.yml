@@ -71,7 +71,18 @@ args:
   name: use_augmentation
   required: false
 changelog: null
-cite: []
+cite:
+- doi: 10.1007/978-3-030-00934-2_30
+  text: Uwe Schmidt and Martin Weigert and Coleman Broaddus and Gene Myers, Cell Detection
+    with Star-Convex Polygons, International Conference on Medical Image Computing
+    and Computer-Assisted Intervention (MICCAI), Granada, Spain, September 2018
+- doi: 10.1109/WACV45572.2020.9093435
+  text: Martin Weigert and Uwe Schmidt and Robert Haase and Ko Sugawara and Gene Myers,
+    Star-convex Polyhedra for 3D Object Detection and Segmentation in Microscopy,
+    IEEE Winter Conference on Applications of Computer Vision (WACV), March 2020
+covers:
+- description: StarDist Train Cover Image
+  source: cover.jpg
 description: An album solution to run stardist_train
 group: io.github.betaseg
 license: unlicense
@@ -80,8 +91,8 @@ solution_creators:
 - Jan Philipp Albrecht
 - Lucas Rieckert
 tags:
-- stardist_train
+- StarDist
 - machine learning
-timestamp: '2023-06-21T15:38:23.281769'
-title: stardist_train
+timestamp: '2023-06-21T18:06:24.706562'
+title: StarDist Train
 version: 0.1.0
