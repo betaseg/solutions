@@ -77,7 +77,7 @@ setup(
             "description": "The CellSketch project to be opened (.n5)."
         }],
     covers=[{
-        "description": "TODO",
+        "description": "cellsketch-pixel-view cover image",
         "source": "cover.png"
     }],
     install=install,
