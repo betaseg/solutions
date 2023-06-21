@@ -173,13 +173,20 @@ setup(
     group="io.github.betaseg",
     name="csbdeep_unet_train",
     version="0.1.0",
-    title="Train a Unet with csbdeeo",
-    description="An album solution to train a Unet with csbdeep.",
+    title="CSBDeep Unet Train",
+    description="An album solution to train a Unet with CSBDeep.",
+    covers=[{
+        "description": "CSBDeep Unet Train Cover Image",
+        "source": "cover.jpg"
+    }],
     solution_creators=["Jan Philipp Albrecht"],
-    cite=[],
-    tags=["machine learning", "dataset"],
+    tags=["machine learning", "dataset", "CSBDeep", "Unet", "training"],
     license="MIT",
     album_api_version="0.5.5",
+    cite=[{
+        "text": "Weigert, Martin, et al. \"Content-aware image restoration: pushing the limits of fluorescence microscopy.\" Nature methods 15.12 (2018): 1090-1097.",
+        "doi": "15.12 (2018): 1090–1097."
+    }],
     args=[
         {
             "name": "root",

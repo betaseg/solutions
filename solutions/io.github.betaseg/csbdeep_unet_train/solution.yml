@@ -62,8 +62,14 @@ args:
   required: false
   type: integer
 changelog: null
-cite: []
-description: An album solution to train a Unet with csbdeep.
+cite:
+- doi: "15.12 (2018): 1090\u20131097."
+  text: 'Weigert, Martin, et al. "Content-aware image restoration: pushing the limits
+    of fluorescence microscopy." Nature methods 15.12 (2018): 1090-1097.'
+covers:
+- description: CSBDeep Unet Train Cover Image
+  source: cover.jpg
+description: An album solution to train a Unet with CSBDeep.
 group: io.github.betaseg
 license: MIT
 name: csbdeep_unet_train
@@ -72,6 +78,9 @@ solution_creators:
 tags:
 - machine learning
 - dataset
-timestamp: '2023-06-21T15:39:11.634751'
-title: Train a Unet with csbdeeo
+- CSBDeep
+- Unet
+- training
+timestamp: '2023-06-21T18:05:22.737096'
+title: CSBDeep Unet Train
 version: 0.1.0
