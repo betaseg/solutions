@@ -66,6 +66,9 @@ def run():
         X = tuple(imread(str(f)) for f in tqdm(fx))
         Y = tuple(fill_label_holes(imread(str(f))) for f in tqdm(fy))
 
+        X = tuple(_X.astype(np.uint32) for _X in X)
+        Y = tuple(_Y.astype(np.uint8) for _Y in Y)
+
         if normalize_img:
             X = tuple(_X.astype(np.float32) / 255 for _X in X)
 
