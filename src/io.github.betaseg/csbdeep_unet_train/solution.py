@@ -1,4 +1,5 @@
 from album.runner.api import get_args, setup
+import sys
 
 env_file = """name:  csbdeep_unet_train
 channels:
@@ -17,6 +18,24 @@ dependencies:
     - tensorflow==2.4.*
     - gputools
 """
+
+# catch MACOSX
+if sys.platform == "darwin":
+    env_file = """name:  csbdeep_unet_train
+    channels:
+      - conda-forge
+      - defaults
+      - nvidia
+    dependencies:
+      - python=3.8
+      - pip
+      - pip:
+        - csbdeep_unet_train
+        - tqdm
+        - git+https://github.com/stardist/augmend.git
+        - tensorflow==2.4.*
+        - gputools
+    """
 
 
 def batch_generator(X, Y, patch_size, batch_size=4, shuffle=True):
@@ -165,7 +184,8 @@ def run():
 
     # data given via generator object, X,Y stay None
     model.train(
-        X=None, Y=None, data_gen=gen, validation_data=[Xvv, Yvv], epochs=args.epochs, steps_per_epoch=args.steps_per_epoch
+        X=None, Y=None, data_gen=gen, validation_data=[Xvv, Yvv], epochs=args.epochs,
+        steps_per_epoch=args.steps_per_epoch
     )
 
 

@@ -1,4 +1,5 @@
 from album.runner.api import get_args, setup, get_environment_path
+import sys
 
 env_file = """name:  stardist_train
 channels:
@@ -16,6 +17,22 @@ dependencies:
     - tensorflow==2.4.*
     - gputools
 """
+# catch MACOSX
+if sys.platform == "darwin":
+    env_file = """name:  stardist_train
+    channels:
+      - conda-forge
+      - defaults
+      - nvidia
+    dependencies:
+      - python=3.8
+      - pip
+      - pip:
+        - stardist
+        - git+https://github.com/stardist/augmend.git
+        - tensorflow==2.4.*
+        - gputools
+    """
 
 
 def run():
