@@ -12,7 +12,7 @@ dependencies:
   - cudnn=8.0.*
   - pip
   - pip:
-    - csbdeep_unet_train
+    - csbdeep
     - tqdm
     - git+https://github.com/stardist/augmend.git
     - tensorflow==2.4.*
@@ -30,7 +30,7 @@ if sys.platform == "darwin":
       - python=3.8
       - pip
       - pip:
-        - csbdeep_unet_train
+        - csbdeep
         - tqdm
         - git+https://github.com/stardist/augmend.git
         - tensorflow==2.4.*
@@ -134,7 +134,7 @@ def run():
     X, Y = get_data(root, "train")
     Xv, Yv = get_data(root, "val")
 
-    if args.use_augmentations:
+    if args.use_augmentation:
         aug = Augmend()
         aug.add([FlipRot90(axis=(1, 2)), FlipRot90(axis=(1, 2))])
         aug.add(
@@ -232,8 +232,8 @@ setup(
         {
             "name": "patch_size",
             "description": "Patch size of each training instance.  Must be given as a string separated by \",\". Default: \"48,128,128\"",
-            "default": 12000,
-            "type": "integer",
+            "default": "48,128,128",
+            "type": "string",
             "required": False
         },
         {

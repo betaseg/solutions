@@ -18,12 +18,12 @@ args:
   name: limit_gpu_memory
   required: false
   type: integer
-- default: 12000
+- default: 48,128,128
   description: 'Patch size of each training instance.  Must be given as a string separated
     by ",". Default: "48,128,128"'
   name: patch_size
   required: false
-  type: integer
+  type: string
 - default: 3
   description: 'The depth of the network. Default: 3'
   name: unet_n_depth
@@ -81,6 +81,6 @@ tags:
 - CSBDeep
 - Unet
 - training
-timestamp: '2023-06-22T19:09:23.298350'
+timestamp: '2023-06-22T20:04:51.986311'
 title: CSBDeep Unet Train
 version: 0.1.0
