@@ -55,18 +55,25 @@ def run():
 
         return y
 
-    # load file
-    x0 = imread(args.fname_input)
-
     model = UNet(None, "unet", basedir=args.root)
 
-    y = apply(model, x0)
-
-    # save output
     out = Path(args.outdir)
-
     out.mkdir(exist_ok=True, parents=True)
-    imwrite(out / f"{Path(args.fname_input).stem}.unet.tif", y.astype(np.uint16))
+
+    # load file(s)
+    input_path = Path(args.fname_input)
+    if input_path.is_dir():
+        for f in input_path.iterdir():
+            if f.suffix == ".tif":
+                x0 = imread(f)
+                y = apply(model, x0)
+
+                imwrite(out / f"{f.stem}.unet.tif", y.astype(np.uint16))
+    else:
+        x0 = imread(input_path)
+        y = apply(model, x0)
+
+        imwrite(out / f"{input_path.stem}.unet.tif", y.astype(np.uint16))
 
 
 setup(
@@ -97,7 +104,7 @@ setup(
         },
         {
             "name": "fname_input",
-            "description": "file path to your input image. Should be a tif file.",
+            "description": "file path to your input image or folder. Should be tif file(s).",
             "type": "string",
             "required": True
         },
