@@ -1,6 +1,6 @@
 album_api_version: 0.5.5
 args:
-- description: root folder of your data. Data structure must be provided as specified
+- description: Root folder of your data. Data structure must be provided as specified
     in documentation!
   name: root
   required: true
@@ -10,66 +10,70 @@ args:
   required: true
   type: string
 - default: 12000
-  description: 'total memory of the gpu to use at max. Default: 12000'
+  description: Total memory of the gpu to use at max.
   name: total_memory
   required: false
   type: integer
+- default: 300
+  description: Number of epochs to train for.
+  name: epochs
+  required: false
+  type: integer
 - default: 2,2,2
-  description: 'Grid of the model. Must be given as a string separated by ",". Default:
-    "2,2,2"'
+  description: Grid of the model. Must be given as a string separated by ",".
   name: grid
   required: false
   type: string
 - default: 96
-  description: 'Rays of the model. Default: 96'
+  description: Rays of the model.
   name: rays
   required: false
   type: integer
 - default: false
-  description: 'Whether to use gpu or not. Only enable if you have a GPU available
-    that is compatible with tensorflow 2.0. Default: False'
+  description: Whether to use gpu or not. Only enable if you have a GPU available
+    that is compatible with tensorflow 2.0.
   name: use_gpu
   required: false
   type: boolean
 - default: 1
-  description: 'Number of input channels. Default: 1'
+  description: Number of input channels
   name: n_channel_in
   required: false
   type: integer
 - default: unet
-  description: 'Backbone of the model. See https://github.com/stardist/stardist for
-    more details. Default: unet'
+  description: Backbone of the model. See https://github.com/stardist/stardist for
+    more details.
   name: backbone
   required: false
   type: string
 - default: 3
-  description: 'Depth of the unet. Default: 3'
+  description: Depth of the unet.
   name: unet_n_depth
   required: false
   type: integer
 - default: 160,160,160
-  description: 'Patch size of the training. Each of the 3 dimensions given as string,
-    separated by comma. Default: "160,160,160"'
+  description: Patch size of the training. Each of the 3 dimensions given as string,
+    separated by comma.
   name: train_patch_size
   required: false
   type: string
 - default: 1
-  description: 'Batch size of the training. Default: 1'
+  description: Batch size of the training.
   name: train_batch_size
   required: false
   type: integer
 - default: 1,0.1
-  description: 'Weights for losses relating to (probability, distance). Given as string,
-    separated by comma. Default: [1, 0.1]'
+  description: Weights for losses relating to (probability, distance). Given as string,
+    separated by comma.
   name: train_loss_weights
   required: false
   type: string
 - default: true
-  description: 'Whether to use augmentation or not. If enabled the data is probabilistically
+  description: Whether to use augmentation or not. If enabled the data is probabilistically
     flipped, rotated, elastic deformed, intensity scaled and additionally noised.
-    Default: True'
   name: use_augmentation
   required: false
+  type: boolean
 changelog: null
 cite:
 - doi: 10.1007/978-3-030-00934-2_30
@@ -83,16 +87,19 @@ cite:
 covers:
 - description: StarDist Train Cover Image
   source: cover.jpg
-description: An album solution to run stardist_train
+description: An album solution to train a stardist model
+documentation:
+- README.md
 group: io.github.betaseg
-license: unlicense
+license: MIT
 name: stardist_train
 solution_creators:
+- Martin Weigert
 - Jan Philipp Albrecht
 - Lucas Rieckert
 tags:
 - StarDist
 - machine learning
-timestamp: '2023-06-21T18:06:24.706562'
+timestamp: '2023-06-26T12:18:15.885628'
 title: StarDist Train
 version: 0.1.0

@@ -1,4 +1,5 @@
 from album.runner.api import get_args, setup, get_environment_path
+import sys
 
 env_file = """name:  stardist_train
 channels:
@@ -9,6 +10,22 @@ dependencies:
   - python=3.8
   - cudatoolkit=11.0.3 
   - cudnn=8.0.*
+  - pip
+  - pip:
+    - stardist
+    - git+https://github.com/stardist/augmend.git
+    - tensorflow==2.4.*
+    - gputools
+"""
+# catch MACOSX
+if sys.platform == "darwin":
+    env_file = """name:  stardist_train
+channels:
+  - conda-forge
+  - defaults
+  - nvidia
+dependencies:
+  - python=3.8
   - pip
   - pip:
     - stardist
@@ -48,6 +65,10 @@ def run():
 
         X = tuple(imread(str(f)) for f in tqdm(fx))
         Y = tuple(fill_label_holes(imread(str(f))) for f in tqdm(fy))
+
+        if any(_X.dtype == np.intc or _X.dtype == np.uintc for _X in X):
+            X = tuple(_X.astype(np.uint32) for _X in X)
+        Y = tuple(_Y.astype(np.uint8) for _Y in Y)
 
         if normalize_img:
             X = tuple(_X.astype(np.float32) / 255 for _X in X)
@@ -104,7 +125,7 @@ def run():
         Y,
         validation_data=(X, Y),
         augmenter=simple_augmenter,
-        epochs=150
+        epochs=args.epochs
     )
 
     model.optimize_thresholds(X, Y, nms_threshs=[0.1, 0.2, 0.3])
@@ -115,8 +136,9 @@ setup(
     name="stardist_train",
     version="0.1.0",
     title="StarDist Train",
-    description="An album solution to run stardist_train",
-    solution_creators=["Jan Philipp Albrecht", "Lucas Rieckert"],
+    description="An album solution to train a stardist model",
+    solution_creators=["Martin Weigert", "Jan Philipp Albrecht", "Lucas Rieckert"],
+    documentation=["README.md"],
     cite=[{
         "text": "Uwe Schmidt and Martin Weigert and Coleman Broaddus and Gene Myers, Cell Detection with Star-Convex Polygons, International Conference on Medical Image Computing and Computer-Assisted Intervention (MICCAI), Granada, Spain, September 2018",
         "doi": "10.1007/978-3-030-00934-2_30"
@@ -129,12 +151,12 @@ setup(
         "source": "cover.jpg"
     }],
     tags=["StarDist", "machine learning"],
-    license="unlicense",
+    license="MIT",
     album_api_version="0.5.5",
     args=[
         {
             "name": "root",
-            "description": "root folder of your data. Data structure must be provided as specified in documentation!",
+            "description": "Root folder of your data. Data structure must be provided as specified in documentation!",
             "type": "string",
             "required": True
         },
@@ -147,21 +169,28 @@ setup(
         {
             "name": "total_memory",
             "type": "integer",
-            "description": "total memory of the gpu to use at max. Default: 12000",
+            "description": "Total memory of the gpu to use at max.",
             "default": 12000,
+            "required": False
+        },
+        {
+            "name": "epochs",
+            "description": "Number of epochs to train for.",
+            "default": 300,
+            "type": "integer",
             "required": False
         },
         {
             "name": "grid",
             "type": "string",
-            "description": "Grid of the model. Must be given as a string separated by \",\". Default: \"2,2,2\"",
+            "description": "Grid of the model. Must be given as a string separated by \",\".",
             "default": "2,2,2",
             "required": False
         },
         {
             "name": "rays",
             "type": "integer",
-            "description": "Rays of the model. Default: 96",
+            "description": "Rays of the model.",
             "default": 96,
             "required": False
         },
@@ -169,43 +198,42 @@ setup(
             "name": "use_gpu",
             "type": "boolean",
             "description": "Whether to use gpu or not. Only enable if you have a GPU available that is compatible with"
-                           " tensorflow 2.0. Default: False",
+                           " tensorflow 2.0.",
             "default": False,
             "required": False
         },
         {
             "name": "n_channel_in",
             "type": "integer",
-            "description": "Number of input channels. Default: 1",
+            "description": "Number of input channels",
             "default": 1,
             "required": False
         },
         {
             "name": "backbone",
             "type": "string",
-            "description": "Backbone of the model. See https://github.com/stardist/stardist for more details. Default: unet",
+            "description": "Backbone of the model. See https://github.com/stardist/stardist for more details.",
             "default": "unet",
             "required": False
         },
         {
             "name": "unet_n_depth",
             "type": "integer",
-            "description": "Depth of the unet. Default: 3",
+            "description": "Depth of the unet.",
             "default": 3,
             "required": False
         },
         {
             "name": "train_patch_size",
             "type": "string",
-            "description": "Patch size of the training. Each of the 3 dimensions given as string, "
-                           "separated by comma. Default: \"160,160,160\"",
+            "description": "Patch size of the training. Each of the 3 dimensions given as string, separated by comma.",
             "default": "160,160,160",
             "required": False
         },
         {
             "name": "train_batch_size",
             "type": "integer",
-            "description": "Batch size of the training. Default: 1",
+            "description": "Batch size of the training.",
             "default": 1,
             "required": False
         },
@@ -213,14 +241,15 @@ setup(
             "name": "train_loss_weights",
             "type": "string",
             "description": "Weights for losses relating to (probability, distance)."
-                           " Given as string, separated by comma. Default: [1, 0.1]",
+                           " Given as string, separated by comma.",
             "default": "1,0.1",
             "required": False
         },
         {
             "name": "use_augmentation",
             "description": "Whether to use augmentation or not. If enabled the data is probabilistically flipped, "
-                           "rotated, elastic deformed, intensity scaled and additionally noised. Default: True",
+                           "rotated, elastic deformed, intensity scaled and additionally noised.",
+            "type": "boolean",
             "default": True,
             "required": False
         },
