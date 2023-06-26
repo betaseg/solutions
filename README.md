@@ -1,1 +1,1 @@
-# Template for an album catalog including the Gatsby website setup
+https://betaseg.github.io/solutions/catalog
