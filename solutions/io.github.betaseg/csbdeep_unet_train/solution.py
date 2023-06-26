@@ -22,20 +22,20 @@ dependencies:
 # catch MACOSX
 if sys.platform == "darwin":
     env_file = """name:  csbdeep_unet_train
-    channels:
-      - conda-forge
-      - defaults
-      - nvidia
-    dependencies:
-      - python=3.8
-      - pip
-      - pip:
-        - csbdeep
-        - tqdm
-        - git+https://github.com/stardist/augmend.git
-        - tensorflow==2.4.*
-        - gputools
-    """
+channels:
+  - conda-forge
+  - defaults
+  - nvidia
+dependencies:
+  - python=3.8
+  - pip
+  - pip:
+    - csbdeep
+    - tqdm
+    - git+https://github.com/stardist/augmend.git
+    - tensorflow==2.4.*
+    - gputools
+"""
 
 
 def batch_generator(X, Y, patch_size, batch_size=4, shuffle=True):
@@ -199,7 +199,7 @@ setup(
         "description": "CSBDeep Unet Train Cover Image",
         "source": "cover.jpg"
     }],
-    solution_creators=["Jan Philipp Albrecht"],
+    solution_creators=["Martin Weigert", "Jan Philipp Albrecht"],
     tags=["machine learning", "dataset", "CSBDeep", "Unet", "training"],
     license="MIT",
     album_api_version="0.5.5",
@@ -207,6 +207,7 @@ setup(
         "text": "Weigert, Martin, et al. \"Content-aware image restoration: pushing the limits of fluorescence microscopy.\" Nature methods 15.12 (2018): 1090-1097.",
         "doi": "15.12 (2018): 1090–1097."
     }],
+    documentation=["README.md"],
     args=[
         {
             "name": "root",

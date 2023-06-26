@@ -70,10 +70,13 @@ covers:
 - description: CSBDeep Unet Train Cover Image
   source: cover.jpg
 description: An album solution to train a Unet with CSBDeep.
+documentation:
+- README.md
 group: io.github.betaseg
 license: MIT
 name: csbdeep_unet_train
 solution_creators:
+- Martin Weigert
 - Jan Philipp Albrecht
 tags:
 - machine learning
@@ -81,6 +84,6 @@ tags:
 - CSBDeep
 - Unet
 - training
-timestamp: '2023-06-22T20:04:51.986311'
+timestamp: '2023-06-26T12:17:15.022640'
 title: CSBDeep Unet Train
 version: 0.1.0
