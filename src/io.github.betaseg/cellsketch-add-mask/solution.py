@@ -58,7 +58,7 @@ def is_file_arg(arg_name):
 
 
 setup(
-    group="de.mdc-berlin",
+    group="io.github.betaseg",
     name="cellsketch-add-mask",
     version="0.1.0",
     solution_creators=["Deborah Schmidt"],
