@@ -22,20 +22,20 @@ dependencies:
 # catch MACOSX
 if sys.platform == "darwin":
     env_file = """name:  csbdeep_unet_predict
-    channels:
-      - conda-forge
-      - defaults
-      - nvidia
-    dependencies:
-      - python=3.8
-      - pip
-      - pip:
-        - csbdeep
-        - tqdm
-        - git+https://github.com/stardist/augmend.git
-        - tensorflow==2.4.*
-        - gputools
-    """
+channels:
+  - conda-forge
+  - defaults
+  - nvidia
+dependencies:
+  - python=3.8
+  - pip
+  - pip:
+    - csbdeep
+    - tqdm
+    - git+https://github.com/stardist/augmend.git
+    - tensorflow==2.4.*
+    - gputools
+"""
 
 
 def run():
@@ -79,7 +79,8 @@ setup(
         "description": "CSBDeep Unet Predict Cover Image",
         "source": "cover.jpg"
     }],
-    solution_creators=["Jan Philipp Albrecht"],
+    documentation=["README.md"],
+    solution_creators=["Martin Weigert", "Jan Philipp Albrecht"],
     tags=["machine learning", "dataset", "CSBDeep", "Unet", "predcit"],
     license="MIT",
     album_api_version="0.5.5",
