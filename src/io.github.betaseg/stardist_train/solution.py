@@ -136,7 +136,7 @@ setup(
     name="stardist_train",
     version="0.1.0",
     title="StarDist Train",
-    description="An album solution to run stardist_train",
+    description="An album solution to train a stardist model",
     solution_creators=["Martin Weigert", "Jan Philipp Albrecht", "Lucas Rieckert"],
     documentation=["README.md"],
     cite=[{
