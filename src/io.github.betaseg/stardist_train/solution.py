@@ -102,6 +102,7 @@ def run():
         train_patch_size=train_patch_size,
         train_batch_size=args.train_batch_size,
         train_loss_weights=train_loss_weights,
+        train_steps_per_epoch=args.train_steps_per_epoch,
     )
     print(conf)
     vars(conf)
@@ -111,8 +112,8 @@ def run():
     if args.use_augmentation:
         aug.add([FlipRot90(axis=(0, 1, 2)), FlipRot90(axis=(0, 1, 2))])
         aug.add([
-            Elastic(axis=(0, 1, 2), amount=5, grid=6, order=0, use_gpu=True),
-            Elastic(axis=(0, 1, 2), amount=5, grid=6, order=0, use_gpu=True)
+            Elastic(axis=(0, 1, 2), amount=5, grid=6, order=0, use_gpu=args.use_gpu),
+            Elastic(axis=(0, 1, 2), amount=5, grid=6, order=0, use_gpu=args.use_gpu)
         ], probability=.7
         )
         aug.add([AdditiveNoise(sigma=0.05), Identity()], probability=.5)
@@ -181,6 +182,13 @@ setup(
             "required": False
         },
         {
+            "name": "steps_per_epoch",
+            "description": "Number of steps per epochs.",
+            "default": 100,
+            "type": "integer",
+            "required": False
+        },
+        {
             "name": "grid",
             "type": "string",
             "description": "Grid of the model. Must be given as a string separated by \",\".",
@@ -199,7 +207,7 @@ setup(
             "type": "boolean",
             "description": "Whether to use gpu or not. Only enable if you have a GPU available that is compatible with"
                            " tensorflow 2.0.",
-            "default": False,
+            "default": True,
             "required": False
         },
         {

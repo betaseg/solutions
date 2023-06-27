@@ -37,8 +37,6 @@ dependencies:
 
 
 def run():
-    from csbdeep.utils.tf import limit_gpu_memory
-    limit_gpu_memory(fraction=0.8, total_memory=12000)
     from csbdeep.utils import Path
     from tifffile import imread, imsave
     import numpy as np

@@ -139,8 +139,8 @@ def run():
         aug.add([FlipRot90(axis=(1, 2)), FlipRot90(axis=(1, 2))])
         aug.add(
             [
-                Elastic(grid=5, amount=5, order=0, use_gpu=True, axis=(0, 1, 2)),
-                Elastic(grid=5, amount=5, order=0, use_gpu=True, axis=(0, 1, 2))
+                Elastic(grid=5, amount=5, order=0, use_gpu=args.use_gpu, axis=(0, 1, 2)),
+                Elastic(grid=5, amount=5, order=0, use_gpu=args.use_gpu, axis=(0, 1, 2))
             ], probability=.8
         )
         aug.add([AdditiveNoise(sigma=(0, 0.05)), Identity()], probability=.5)
@@ -284,6 +284,14 @@ setup(
             "description": "Patience after which to start learn rate reduction.",
             "default": 50,
             "type": "integer",
+            "required": False
+        },
+        {
+            "name": "use_gpu",
+            "type": "boolean",
+            "description": "Whether to use gpu or not. Only enable if you have a GPU available that is compatible with"
+                           " tensorflow 2.0.",
+            "default": True,
             "required": False
         },
     ],
