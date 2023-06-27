@@ -102,7 +102,7 @@ def run():
         train_patch_size=train_patch_size,
         train_batch_size=args.train_batch_size,
         train_loss_weights=train_loss_weights,
-        train_steps_per_epoch=args.train_steps_per_epoch,
+        train_steps_per_epoch=args.steps_per_epoch,
     )
     print(conf)
     vars(conf)
