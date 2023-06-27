@@ -218,21 +218,21 @@ setup(
         {
             "name": "use_augmentation",
             "description": "Whether to use augmentation or not. If enabled the data is probabilistically flipped, "
-                           "rotated, elastic deformed, intensity scaled and additionally noised. Default: True",
+                           "rotated, elastic deformed, intensity scaled and additionally noised.",
             "default": True,
             "type": "boolean",
             "required": False
         },
         {
             "name": "limit_gpu_memory",
-            "description": "The absolute number of bytes to allocate for GPU memory. Default: 12000",
+            "description": "The absolute number of bytes to allocate for GPU memory.",
             "default": 12000,
             "type": "integer",
             "required": False
         },
         {
             "name": "patch_size",
-            "description": "Patch size of each training instance.  Must be given as a string separated by \",\". Default: \"48,128,128\"",
+            "description": "Patch size of each training instance.  Must be given as a string separated by \",\".",
             "default": "48,128,128",
             "type": "string",
             "required": False
@@ -246,14 +246,14 @@ setup(
         },
         {
             "name": "unet_pool_size",
-            "description": "The pool size of the network. Must be given as a string separated by \",\". Should be as many numbers as unet is deep. Default: \"2,4,4\"",
+            "description": "The pool size of the network. Must be given as a string separated by \",\". Should be as many numbers as unet is deep.",
             "default": "2,4,4",
             "type": "string",
             "required": False
         },
         {
             "name": "train_class_weight",
-            "description": "The weights for the binary cross entropy dice loss. First weight for negative class. Must be given as a string separated by \",\". Default: \"1,5\"",
+            "description": "The weights for the binary cross entropy dice loss. First weight for negative class. Must be given as a string separated by \",\".",
             "default": "1,5",
             "type": "string",
             "required": False

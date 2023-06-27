@@ -37,6 +37,8 @@ dependencies:
 
 def run():
     args = get_args()
+    from subprocess import Popen
+    import webbrowser
 
     from csbdeep.utils.tf import limit_gpu_memory
     limit_gpu_memory(fraction=0.8, total_memory=args.total_memory)
@@ -118,6 +120,9 @@ def run():
         )
         aug.add([AdditiveNoise(sigma=0.05), Identity()], probability=.5)
         aug.add([IntensityScaleShift(scale=(.8, 1.2), shift=(-.1, .1)), Identity()], probability=.5)
+
+    _ = Popen(["tensorboard --logdir " + str(basedir) + " --host localhost --port 6006"])
+    webbrowser.open("localhost:6006", new=1)
 
     # create the Stardist Model and train
     model = StarDist3D(conf, name=name, basedir=str(basedir))
