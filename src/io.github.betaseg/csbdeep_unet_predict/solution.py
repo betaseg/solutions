@@ -55,7 +55,7 @@ def run():
 
         return y
 
-    model = UNet(None, "unet", basedir=args.root)
+    model = UNet(None, args.model_name, basedir=args.root)
 
     out = Path(args.outdir)
     out.mkdir(exist_ok=True, parents=True)
@@ -98,6 +98,12 @@ setup(
     args=[
         {
             "name": "root",
+            "description": "root folder of your models.",
+            "type": "string",
+            "required": True
+        },
+        {
+            "name": "model_name",
             "description": "root folder of your models.",
             "type": "string",
             "required": True
