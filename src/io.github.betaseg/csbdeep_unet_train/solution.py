@@ -184,7 +184,7 @@ def run():
 
     # data given via generator object, X,Y stay None
     model.train(
-        X=None, Y=None, data_gen=gen, validation_data=[Xvv, Yvv], epochs=args.epochs,
+        X=None, Y=None, data_gen=gen, validation_data=(Xvv, Yvv), epochs=args.epochs,
         steps_per_epoch=args.steps_per_epoch
     )
 
