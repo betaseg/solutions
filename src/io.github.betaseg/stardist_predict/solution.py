@@ -109,17 +109,17 @@ setup(
     args=[
         {
             "name": "fname_input",
-            "description": "Path to the input tif file or folder of tif images.",
+            "description": "Path of the input tif file or folder of tif images.",
             "required": True
         },
         {
             "name": "model_name",
-            "description": "Path to the input model.",
+            "description": "Name of the folder in which the input model is stored.",
             "required": True
         },
         {
             "name": "model_basedir",
-            "description": "Path to the model directory.",
+            "description": "Path to the directory that contains the folders (model_name) for each individual model.",
             "required": True
         },
         {
