@@ -104,7 +104,7 @@ setup(
         },
         {
             "name": "model_name",
-            "description": "root folder of your models.",
+            "description": "Folder name in which the model is stored.",
             "type": "string",
             "required": True
         },
