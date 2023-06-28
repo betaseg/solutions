@@ -1,0 +1,28 @@
+album_api_version: 0.5.5
+args:
+- description: Path to input .blend file
+  name: input
+  required: false
+  type: file
+- description: If provided, Blender is launched in headless mode and the first frame
+    is rendered to this path.
+  name: output_rendering
+  required: false
+  type: file
+changelog: null
+cite:
+- text: 'Blender Online Community: Blender - a 3D modelling and rendering package
+    (2018). Stichting Blender Foundation, Amsterdam.'
+  url: http://www.blender.org
+covers:
+- description: ''
+  source: cover.png
+description: This solution launches Blender, optionally with a specific .blend file
+  as input.
+group: io.github.betaseg
+name: launch-blender
+solution_creators:
+- Deborah Schmidt
+timestamp: '2023-06-28T12:44:26.486942'
+title: Launch Blender 3.3.1
+version: 0.1.0
