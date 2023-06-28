@@ -19,6 +19,11 @@ args:
   name: epochs
   required: false
   type: integer
+- default: 100
+  description: Number of steps per epochs.
+  name: steps_per_epoch
+  required: false
+  type: integer
 - default: 2,2,2
   description: Grid of the model. Must be given as a string separated by ",".
   name: grid
@@ -29,7 +34,7 @@ args:
   name: rays
   required: false
   type: integer
-- default: false
+- default: true
   description: Whether to use gpu or not. Only enable if you have a GPU available
     that is compatible with tensorflow 2.0.
   name: use_gpu
@@ -100,6 +105,6 @@ solution_creators:
 tags:
 - StarDist
 - machine learning
-timestamp: '2023-06-26T12:18:15.885628'
+timestamp: '2023-06-28T16:56:30.305786'
 title: StarDist Train
 version: 0.1.0

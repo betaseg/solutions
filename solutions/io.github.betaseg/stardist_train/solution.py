@@ -37,6 +37,8 @@ dependencies:
 
 def run():
     args = get_args()
+    from subprocess import Popen
+    import webbrowser
 
     from csbdeep.utils.tf import limit_gpu_memory
     limit_gpu_memory(fraction=0.8, total_memory=args.total_memory)
@@ -44,6 +46,7 @@ def run():
     from tifffile import imread
     from tqdm import tqdm
     from glob import glob
+    import time
     from datetime import datetime
     import numpy as np
     from stardist import fill_label_holes, calculate_extents
@@ -102,6 +105,7 @@ def run():
         train_patch_size=train_patch_size,
         train_batch_size=args.train_batch_size,
         train_loss_weights=train_loss_weights,
+        train_steps_per_epoch=args.steps_per_epoch,
     )
     print(conf)
     vars(conf)
@@ -111,12 +115,16 @@ def run():
     if args.use_augmentation:
         aug.add([FlipRot90(axis=(0, 1, 2)), FlipRot90(axis=(0, 1, 2))])
         aug.add([
-            Elastic(axis=(0, 1, 2), amount=5, grid=6, order=0, use_gpu=True),
-            Elastic(axis=(0, 1, 2), amount=5, grid=6, order=0, use_gpu=True)
+            Elastic(axis=(0, 1, 2), amount=5, grid=6, order=0, use_gpu=args.use_gpu),
+            Elastic(axis=(0, 1, 2), amount=5, grid=6, order=0, use_gpu=args.use_gpu)
         ], probability=.7
         )
         aug.add([AdditiveNoise(sigma=0.05), Identity()], probability=.5)
         aug.add([IntensityScaleShift(scale=(.8, 1.2), shift=(-.1, .1)), Identity()], probability=.5)
+
+    p = Popen(["tensorboard",  "--logdir", str(basedir), "--reload_interval", "60"])
+    time.sleep(5)
+    webbrowser.open("http://localhost:6006", new=1)
 
     # create the Stardist Model and train
     model = StarDist3D(conf, name=name, basedir=str(basedir))
@@ -181,6 +189,13 @@ setup(
             "required": False
         },
         {
+            "name": "steps_per_epoch",
+            "description": "Number of steps per epochs.",
+            "default": 100,
+            "type": "integer",
+            "required": False
+        },
+        {
             "name": "grid",
             "type": "string",
             "description": "Grid of the model. Must be given as a string separated by \",\".",
@@ -199,7 +214,7 @@ setup(
             "type": "boolean",
             "description": "Whether to use gpu or not. Only enable if you have a GPU available that is compatible with"
                            " tensorflow 2.0.",
-            "default": False,
+            "default": True,
             "required": False
         },
         {
