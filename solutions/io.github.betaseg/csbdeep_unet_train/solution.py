@@ -115,7 +115,7 @@ def run():
     args = get_args()
 
     import numpy as np
-
+    import time
     from datetime import datetime
     from csbdeep.utils import Path, normalize
     from csbdeep.utils.tf import CARETensorBoard, limit_gpu_memory
@@ -123,6 +123,8 @@ def run():
     from augmend import Augmend, BaseTransform, Elastic, Identity, FlipRot90, AdditiveNoise, CutOut, GaussianBlur, \
         IntensityScaleShift
     from model import UNetConfig, UNet
+    from subprocess import Popen
+    import webbrowser
     np.random.seed(42)
 
     # process args:
@@ -139,8 +141,8 @@ def run():
         aug.add([FlipRot90(axis=(1, 2)), FlipRot90(axis=(1, 2))])
         aug.add(
             [
-                Elastic(grid=5, amount=5, order=0, use_gpu=True, axis=(0, 1, 2)),
-                Elastic(grid=5, amount=5, order=0, use_gpu=True, axis=(0, 1, 2))
+                Elastic(grid=5, amount=5, order=0, use_gpu=args.use_gpu, axis=(0, 1, 2)),
+                Elastic(grid=5, amount=5, order=0, use_gpu=args.use_gpu, axis=(0, 1, 2))
             ], probability=.8
         )
         aug.add([AdditiveNoise(sigma=(0, 0.05)), Identity()], probability=.5)
@@ -182,9 +184,13 @@ def run():
 
     Xvv, Yvv = next(gen_val)
 
+    p = Popen(["tensorboard",  "--logdir", "./models", "--reload_interval", "60"])
+    time.sleep(5)
+    webbrowser.open("http://localhost:6006", new=1)
+
     # data given via generator object, X,Y stay None
     model.train(
-        X=None, Y=None, data_gen=gen, validation_data=[Xvv, Yvv], epochs=args.epochs,
+        X=None, Y=None, data_gen=gen, validation_data=(Xvv, Yvv), epochs=args.epochs,
         steps_per_epoch=args.steps_per_epoch
     )
 
@@ -218,21 +224,21 @@ setup(
         {
             "name": "use_augmentation",
             "description": "Whether to use augmentation or not. If enabled the data is probabilistically flipped, "
-                           "rotated, elastic deformed, intensity scaled and additionally noised. Default: True",
+                           "rotated, elastic deformed, intensity scaled and additionally noised.",
             "default": True,
             "type": "boolean",
             "required": False
         },
         {
             "name": "limit_gpu_memory",
-            "description": "The absolute number of bytes to allocate for GPU memory. Default: 12000",
+            "description": "The absolute number of bytes to allocate for GPU memory.",
             "default": 12000,
             "type": "integer",
             "required": False
         },
         {
             "name": "patch_size",
-            "description": "Patch size of each training instance.  Must be given as a string separated by \",\". Default: \"48,128,128\"",
+            "description": "Patch size of each training instance.  Must be given as a string separated by \",\".",
             "default": "48,128,128",
             "type": "string",
             "required": False
@@ -246,14 +252,14 @@ setup(
         },
         {
             "name": "unet_pool_size",
-            "description": "The pool size of the network. Must be given as a string separated by \",\". Should be as many numbers as unet is deep. Default: \"2,4,4\"",
+            "description": "The pool size of the network. Must be given as a string separated by \",\". Should be as many numbers as unet is deep.",
             "default": "2,4,4",
             "type": "string",
             "required": False
         },
         {
             "name": "train_class_weight",
-            "description": "The weights for the binary cross entropy dice loss. First weight for negative class. Must be given as a string separated by \",\". Default: \"1,5\"",
+            "description": "The weights for the binary cross entropy dice loss. First weight for negative class. Must be given as a string separated by \",\".",
             "default": "1,5",
             "type": "string",
             "required": False
@@ -284,6 +290,14 @@ setup(
             "description": "Patience after which to start learn rate reduction.",
             "default": 50,
             "type": "integer",
+            "required": False
+        },
+        {
+            "name": "use_gpu",
+            "type": "boolean",
+            "description": "Whether to use gpu or not. Only enable if you have a GPU available that is compatible with"
+                           " tensorflow 2.0.",
+            "default": True,
             "required": False
         },
     ],

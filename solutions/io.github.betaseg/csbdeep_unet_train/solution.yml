@@ -6,21 +6,19 @@ args:
   required: true
   type: string
 - default: true
-  description: 'Whether to use augmentation or not. If enabled the data is probabilistically
+  description: Whether to use augmentation or not. If enabled the data is probabilistically
     flipped, rotated, elastic deformed, intensity scaled and additionally noised.
-    Default: True'
   name: use_augmentation
   required: false
   type: boolean
 - default: 12000
-  description: 'The absolute number of bytes to allocate for GPU memory. Default:
-    12000'
+  description: The absolute number of bytes to allocate for GPU memory.
   name: limit_gpu_memory
   required: false
   type: integer
 - default: 48,128,128
-  description: 'Patch size of each training instance.  Must be given as a string separated
-    by ",". Default: "48,128,128"'
+  description: Patch size of each training instance.  Must be given as a string separated
+    by ",".
   name: patch_size
   required: false
   type: string
@@ -30,14 +28,14 @@ args:
   required: false
   type: integer
 - default: 2,4,4
-  description: 'The pool size of the network. Must be given as a string separated
-    by ",". Should be as many numbers as unet is deep. Default: "2,4,4"'
+  description: The pool size of the network. Must be given as a string separated by
+    ",". Should be as many numbers as unet is deep.
   name: unet_pool_size
   required: false
   type: string
 - default: 1,5
-  description: 'The weights for the binary cross entropy dice loss. First weight for
-    negative class. Must be given as a string separated by ",". Default: "1,5"'
+  description: The weights for the binary cross entropy dice loss. First weight for
+    negative class. Must be given as a string separated by ",".
   name: train_class_weight
   required: false
   type: string
@@ -61,6 +59,12 @@ args:
   name: train_reduce_lr_patience
   required: false
   type: integer
+- default: true
+  description: Whether to use gpu or not. Only enable if you have a GPU available
+    that is compatible with tensorflow 2.0.
+  name: use_gpu
+  required: false
+  type: boolean
 changelog: null
 cite:
 - doi: "15.12 (2018): 1090\u20131097."
@@ -84,6 +88,6 @@ tags:
 - CSBDeep
 - Unet
 - training
-timestamp: '2023-06-26T12:17:15.022640'
+timestamp: '2023-06-28T16:59:54.621200'
 title: CSBDeep Unet Train
 version: 0.1.0
