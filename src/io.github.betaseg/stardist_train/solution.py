@@ -46,6 +46,7 @@ def run():
     from tifffile import imread
     from tqdm import tqdm
     from glob import glob
+    import time
     from datetime import datetime
     import numpy as np
     from stardist import fill_label_holes, calculate_extents
@@ -121,8 +122,9 @@ def run():
         aug.add([AdditiveNoise(sigma=0.05), Identity()], probability=.5)
         aug.add([IntensityScaleShift(scale=(.8, 1.2), shift=(-.1, .1)), Identity()], probability=.5)
 
-    _ = Popen(["tensorboard --logdir " + str(basedir) + " --host localhost --port 6006"])
-    webbrowser.open("localhost:6006", new=1)
+    p = Popen(["tensorboard",  "--logdir", str(basedir), "--reload_interval", "60"])
+    time.sleep(5)
+    webbrowser.open("http://localhost:6006", new=1)
 
     # create the Stardist Model and train
     model = StarDist3D(conf, name=name, basedir=str(basedir))
