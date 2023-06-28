@@ -115,7 +115,7 @@ def run():
     args = get_args()
 
     import numpy as np
-
+    import time
     from datetime import datetime
     from csbdeep.utils import Path, normalize
     from csbdeep.utils.tf import CARETensorBoard, limit_gpu_memory
@@ -123,6 +123,8 @@ def run():
     from augmend import Augmend, BaseTransform, Elastic, Identity, FlipRot90, AdditiveNoise, CutOut, GaussianBlur, \
         IntensityScaleShift
     from model import UNetConfig, UNet
+    from subprocess import Popen
+    import webbrowser
     np.random.seed(42)
 
     # process args:
@@ -181,6 +183,10 @@ def run():
     model = UNet(conf, name=f"{timestamp}_unet", basedir="models")
 
     Xvv, Yvv = next(gen_val)
+
+    p = Popen(["tensorboard",  "--logdir", "./models", "--reload_interval", "60"])
+    time.sleep(5)
+    webbrowser.open("http://localhost:6006", new=1)
 
     # data given via generator object, X,Y stay None
     model.train(
