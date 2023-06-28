@@ -1,4 +1,5 @@
 from album.runner.api import setup
+
 path_download_macos = "https://download.blender.org/release/Blender3.3/blender-3.3.1-macos-x64.dmg"
 path_download_linux = "https://download.blender.org/release/Blender3.3/blender-3.3.1-linux-x64.tar.xz"
 path_download_windows = "https://download.blender.org/release/Blender3.3/blender-3.3.1-windows-x64.zip"
@@ -11,7 +12,7 @@ path_run_macos = "Contents/MacOS/Blender"
 
 
 def install():
-    from album.runner.api import get_cache_path
+    from album.runner.api import get_cache_path, get_app_path
     import sys
     get_cache_path().mkdir(exist_ok=True, parents=True)
     operation_system = sys.platform
@@ -121,112 +122,62 @@ def _get_blender_executable():
         return path_run_windows
 
 
-def list_files(startpath):
-    import os
-    for root, dirs, files in os.walk(startpath):
-        level = root.replace(startpath, '').count(os.sep)
-        indent = ' ' * 4 * (level)
-        print('{}{}/'.format(indent, os.path.basename(root)))
-        subindent = ' ' * 4 * (level + 1)
-        for f in files:
-            print('{}{}'.format(subindent, f))
-
-
-def run_blender_script(script, *params):
+def run_blender_script(*params):
     import subprocess
     from album.runner.api import get_app_path, get_args
     blender_path = str(get_app_path().joinpath(_get_blender_executable()))
-
-    if get_args().headless:
-        args = [blender_path, "-b", "-d", "-noaudio", "--debug-gpu-force-workarounds", "-P", script, "--"]
-    else:
-        args = [blender_path, "-d", "-noaudio", "--debug-gpu-force-workarounds", "-P", script, "--"]
+    args = [blender_path, "-d"]
     args.extend(params)
     subprocess.run(args)
 
 
 def run():
     from pathlib import Path
-    from album.runner.api import get_args, get_package_path
-
-    project = Path(get_args().project)
-    include = None
-    exclude = None
-    if get_args().include:
-        include = get_args().include
-    if get_args().exclude:
-        exclude = get_args().exclude
-    output_path = project.joinpath("export", "meshes")
-
-    decimate_ratio = get_args().decimate_ratio
-    resolution_percentage = get_args().resolution_percentage
+    from album.runner.api import get_args
+    input_blend = get_args().input
     output_rendering = get_args().output_rendering
-    output_blend = Path(get_args().output_blend).absolute()
+    args = []
+    if input_blend:
+        input_blend = str(Path(input_blend).absolute())
+        args.append(input_blend)
     if output_rendering:
-        Path(output_rendering).parent.mkdir(exist_ok=True, parents=True)
-    Path(output_blend).parent.mkdir(exist_ok=True, parents=True)
-    run_blender_script(str(Path(get_package_path()).joinpath("blender_script.py").absolute()), str(decimate_ratio),
-                       str(resolution_percentage), str(output_path), str(output_blend), str(output_rendering), str(include), str(exclude))
+        args.append('-b')
+        args.append('-o')
+        args.append(output_rendering)
+        args.append('-f')
+        args.append('0')
+        # args.append('-a')
+    run_blender_script(*args)
 
 
 setup(
     group="io.github.betaseg",
-    name="cellsketch-blender-scene",
+    name="launch-blender",
     version="0.1.0",
-    album_api_version="0.5.3",
+    album_api_version="0.5.5",
     solution_creators=['Deborah Schmidt'],
     cite=[{
         "text": "Blender Online Community: Blender - a 3D modelling and rendering package (2018). Stichting Blender Foundation, Amsterdam.",
         "url": "http://www.blender.org"
     }],
-    title="CellSketch: Generate Blender scene from mesh files",
-    description="This solution imports STL files from a CellSketch project into the same scene, optionally reducing their mesh complexity and rendering the scene.",
+    title="Launch Blender 3.3.1",
+    description="This solution launches Blender, optionally with a specific .blend file as input.",
     covers=[{
-        "description": "This rendering was generated based on data from the following publication: Andreas Müller, Deborah Schmidt, C. Shan Xu, Song Pang, Joyson Verner D’Costa, Susanne Kretschmar, Carla Münster, Thomas Kurth, Florian Jug, Martin Weigert, Harald F. Hess, Michele Solimena; 3D FIB-SEM reconstruction of microtubule–organelle interaction in whole primary mouse β cells. J Cell Biol 1 February 2021; 220 (2): e202010039. doi: https://doi.org/10.1083/jcb.202010039",
+       "description": "",
         "source": "cover.png"
     }],
-    run=run,
     install=install,
+    run=run,
     args=[{
-        "name": "project",
-        "type": "directory",
-        "description": "The CellSketch project (ends with .n5)",
-        "required": True
+        "name": "input",
+        "type": "file",
+        "description": "Path to input .blend file",
+        "required": False
     }, {
         "name": "output_rendering",
         "type": "file",
         "required": False,
-        "description": "Path for storing the rendering (file name should end with .png or .jpg)",
-    }, {
-        "name": "output_blend",
-        "type": "file",
-        "description": "Path for storing the Blender project for rendering (file name should end with .blend)",
-        "required": True
-    }, {
-        "name": "resolution_percentage",
-        "default": 100,
-        "type": "integer",
-        "description": "Resolution of rendering (integer value from 1 - 100)"
-    }, {
-        "name": "decimate_ratio",
-        "default": 1.0,
-        "type": "float",
-        "description": "Decimation ratio of the mesh (float, 0-1)"
-    }, {
-        "name": "headless",
-        "default": False,
-        "type": "boolean",
-        "description": "Run Blender in the background or open the window (default)."
-    }, {
-        "name": "include",
-        "type": "string",
-        "description": "List of names of elements which should be loaded, comma separated",
-        "required": False
-    }, {
-        "name": "exclude",
-        "type": "string",
-        "description": "List of names of elements which should not be loaded, comma separated",
-        "required": False
+        "description": "If provided, Blender is launched in headless mode and the first frame is rendered to this path."
     }],
     dependencies={'environment_file': """channels:
   - defaults
