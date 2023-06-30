@@ -305,7 +305,7 @@ class UNet(CARE):
         fit = self.keras_model.fit_generator if IS_TF_1 else self.keras_model.fit
         history = fit(iter(self.data_train), validation_data=(xv, yv),
                       epochs=epochs, steps_per_epoch=steps_per_epoch,
-                      callbacks=self.callbacks, verbose=1)
+                      callbacks=self.callbacks, verbose=1, workers=4)
         self._training_finished()
 
         return history    
