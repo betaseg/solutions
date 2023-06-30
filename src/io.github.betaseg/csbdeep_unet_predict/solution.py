@@ -41,13 +41,15 @@ dependencies:
 def run():
     import numpy as np
     from tifffile import imread, imwrite
+    from cbsdeep.utils import normalize_mi_ma 
     from model import UNet
     from pathlib import Path
 
     args = get_args()
 
     def apply(model, x0):
-        x = x0.astype(np.float32) / 255.
+        x0 = x0.astype(np.float32)
+        x = normalize(x0)
         n_tiles = tuple(int(np.ceil(s / 196)) for s in x0.shape)
         y_full = model.predict(x, axes="ZYX", normalizer=None, n_tiles=n_tiles)
 
