@@ -82,6 +82,6 @@ setup(
     }],
     install=install,
     run=run,
-    dependencies={'parent': {'resolve_solution': 'io.github.betaseg:cellsketch-create:0.1.0'}}
+    dependencies={'parent': {'resolve_solution': 'io.github.betaseg:cellsketch-create-project:0.1.0'}}
 )
 

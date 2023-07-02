@@ -84,8 +84,6 @@ def run():
     labelmaps = project_file.attrs['labelmaps']
     filaments = project_file.attrs['filaments']
     meshes = []
-    print(headless)
-    breakpoint()
     for mask in masks:
         if mask == "membrane border":
             continue
@@ -191,6 +189,13 @@ setup(
     title="CellSketch: Export masks and labelmaps as meshes",
     description="VTK based mesh generation from pixel data, exports all masks and labelmaps from CellSketch project as meshes.",
     solution_creators=['Deborah Schmidt'],
+    cite=[{
+        "text": "Schroeder, W.; Martin, K.; Lorensen, B. (2006). The Visualization Toolkit (4th ed.), Kitware, ISBN 978-1-930934-19-1",
+        "url": "https://vtk.org/"
+    },{
+        "text": "Pape, C. (2019). constantinpape/z5",
+        "doi": "10.5281/ZENODO.3585752"
+    }],
     run=run,
     args=[{
         "name": "project",
@@ -211,7 +216,7 @@ setup(
         "name": "headless",
         "type": "boolean",
         "description": "Do not display mesh after processing it. Set this to true if you run into memory issues.",
-        # "default": False,
+        "default": False,
     }],
     covers=[{
         "description": "Screenshot of a raw image next to the mesh generated from it and displayed using vtkplotlib.",
