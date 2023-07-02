@@ -12,6 +12,10 @@ args:
   description: Do not recalculate existing distance transform maps.
   name: skip_existing_distance_maps
   type: boolean
+- default: 4
+  description: Threads to use to calculate the distance transform maps.
+  name: num_threads
+  type: integer
 changelog: null
 cite:
 - doi: https://doi.org/10.1083/jcb.202010039
@@ -23,6 +27,8 @@ cite:
   text: "Pietzsch, T., Saalfeld, S., Preibisch, S., & Tomancak, P. (2015). BigDataViewer:\
     \ visualization and processing for large image data sets. Nature Methods, 12(6),\
     \ 481\u2013483."
+- doi: 10.5281/ZENODO.3585752
+  text: Pape, C. (2019). constantinpape/z5
 covers:
 - description: TODO
   source: cover.png
@@ -38,6 +44,6 @@ tags:
 - segmentation
 - annotation
 - analysis
-timestamp: '2023-06-19T09:55:24.459260'
+timestamp: '2023-07-02T19:29:10.062978'
 title: 'CellSketch: Run spatial analysis'
 version: 0.1.0
