@@ -31,12 +31,24 @@ def get_gradle_executable():
 def run():
     import subprocess
     from pathlib import Path
-    from album.runner.api import get_args, get_app_path, get_active_solution
-    params = ""
+    from album.runner.api import get_args, get_app_path
+
+    project = Path(get_args().project)
+    skip_existing_distance_maps = get_args().skip_existing_distance_maps
+    num_threads = get_args().num_threads
+
+    calculate_edt(project, skip_existing_distance_maps, num_threads)
+
+    # parsing album arguments to gradle arguments. this should become a utility method.
+    # setting skip_existing_distance_maps by default because this solution is calculating the EDTs in Python and
+    # therefore they don't have to be recalculated in Java
+    params = "--skip_existing_distance_maps "
     args = get_args()
     for arg_name in args.__dict__:
         arg_val = args.__dict__[arg_name]
         if arg_val is not None:
+            if arg_name == "skip_existing_distance_maps" or arg_name == "num_threads":
+                continue
             if is_file_arg(arg_name):
                 params += "--%s '%s' " % (arg_name, str(Path(arg_val).absolute()))
             else:
@@ -47,6 +59,73 @@ def run():
                     params += "--%s %s " % (arg_name, arg_val)
     # run app via gradle
     subprocess.run([get_gradle_executable(), 'run', '-q', '--args="%s"' % params], cwd=get_app_path())
+
+
+def calculate_edt(project, skip_existing_distance_maps, num_threads):
+    import edt
+    import z5py
+    from pathlib import Path
+    import numpy as np
+    import shutil
+    import os
+
+    project_file = z5py.File(str(project))
+    project_name = Path(project).name.rstrip(".n5")
+    masks = project_file.attrs['masks']
+    labelmaps = project_file.attrs['labelmaps']
+    filaments = project_file.attrs['filaments']
+    to_be_processed = []
+
+    for mask in masks:
+        to_be_processed.append(masks[mask])
+    for labelmap in labelmaps:
+        to_be_processed.append(labelmaps[labelmap])
+    for filament in filaments:
+        to_be_processed.append(filaments[filament])
+    if 'cellbounds' in project_file.attrs:
+        cellbound_volume = project_file.attrs['cellbounds']
+        if not cellbound_volume.startswith(project_name):
+            cellbound_volume = project_name + "_" + cellbound_volume
+        to_be_processed.append(cellbound_volume)
+
+    analysis_group_name = 'analysis'
+    # Check if group exists
+    try:
+        analysis_group = project_file[analysis_group_name]
+    except KeyError:
+        # If not, create the group
+        analysis_group = project_file.create_group(analysis_group_name)
+
+    for item in to_be_processed:
+        edt_result_file = item.lstrip(os.sep) + "_distance_map"
+        # Check if the dataset exists
+        if edt_result_file in analysis_group:
+            if skip_existing_distance_maps:
+                continue
+            dataset_path = os.path.join(project, analysis_group_name, edt_result_file)
+
+            # Delete the dataset folder
+            shutil.rmtree(dataset_path)
+
+        mask = load_as_mask(project_file, item)
+        dt = edt.edt(
+            np.ascontiguousarray(mask),
+            parallel=num_threads  # number of threads, <= 0 sets to num cpu
+        )
+
+        analysis_group.create_dataset(edt_result_file, data=dt, chunks=(64, 64, 64), dtype='float32')
+
+
+def load_as_mask(project, item):
+    import numpy as np
+    import os
+    item = item.lstrip(os.sep)
+    print("Loading dataset from %s.." % item)
+    project_item = project[item]
+    data = np.array(project_item)
+    # the edt used here calculates the distance of label pixels to the background - we need the opposite
+    data = data == 0
+    return data
 
 
 def is_file_arg(arg_name):
@@ -72,6 +151,9 @@ setup(
     }, {
         "text": "Pietzsch, T., Saalfeld, S., Preibisch, S., & Tomancak, P. (2015). BigDataViewer: visualization and processing for large image data sets. Nature Methods, 12(6), 481–483.",
         "doi": "10.1038/nmeth.3392"
+    }, {
+        "text": "Pape, C. (2019). constantinpape/z5",
+        "doi": "10.5281/ZENODO.3585752"
     }],
     album_api_version="0.5.5",
     args=[{
@@ -89,6 +171,11 @@ setup(
             "type": "boolean",
             "default": False,
             "description": "Do not recalculate existing distance transform maps."
+        }, {
+            "name": "num_threads",
+            "type": "integer",
+            "default": 4,
+            "description": "Threads to use to calculate the distance transform maps."
         }],
     covers=[{
         "description": "TODO",
@@ -96,6 +183,14 @@ setup(
     }],
     install=install,
     run=run,
-    dependencies={'parent': {'resolve_solution': 'io.github.betaseg:cellsketch-create:0.1.0'}}
+    dependencies={'environment_file': """channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - openjdk=11.0.9.1
+  - z5py=2.0.16
+  - edt=2.3.0
+"""}
 )
 
