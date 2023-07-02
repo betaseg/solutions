@@ -77,11 +77,11 @@ setup(
             "description": "The CellSketch project to be opened (.n5)."
         }],
     covers=[{
-        "description": "TODO",
+        "description": "cellsketch-pixel-view cover image",
         "source": "cover.png"
     }],
     install=install,
     run=run,
-    dependencies={'parent': {'resolve_solution': 'io.github.betaseg:cellsketch-create:0.1.0'}}
+    dependencies={'parent': {'resolve_solution': 'io.github.betaseg:cellsketch-create-project:0.1.0'}}
 )
 

@@ -16,7 +16,7 @@ cite:
     \ visualization and processing for large image data sets. Nature Methods, 12(6),\
     \ 481\u2013483."
 covers:
-- description: TODO
+- description: cellsketch-pixel-view cover image
   source: cover.png
 description: This solution displays a CellSketch project in BDV.
 group: io.github.betaseg
@@ -28,6 +28,6 @@ tags:
 - cellsketch
 - segmentation
 - annotation
-timestamp: '2023-06-19T09:54:57.381475'
+timestamp: '2023-07-02T19:30:48.856802'
 title: 'CellSketch: Display data in BigDataViewer'
 version: 0.1.0
