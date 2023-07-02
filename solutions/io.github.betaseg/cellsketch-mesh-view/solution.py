@@ -95,6 +95,13 @@ setup(
     description="Displays all exported meshes from a CellSketch project using vtkplotlib. Colors can be adjusted in the CellSketch BigDataViewer app.",
     solution_creators=['Deborah Schmidt'],
     tags=["mesh", "cellsketch"],
+    cite=[{
+        "text": "Schroeder, W.; Martin, K.; Lorensen, B. (2006). The Visualization Toolkit (4th ed.), Kitware, ISBN 978-1-930934-19-1",
+        "url": "https://vtk.org/"
+    },{
+        "text": "Pape, C. (2019). constantinpape/z5",
+        "doi": "10.5281/ZENODO.3585752"
+    }],
     run=run,
     args=[{
         "name": "project",

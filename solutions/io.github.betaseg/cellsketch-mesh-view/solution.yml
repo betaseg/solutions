@@ -15,6 +15,12 @@ args:
 changelog: '- initial release
 
   '
+cite:
+- text: Schroeder, W.; Martin, K.; Lorensen, B. (2006). The Visualization Toolkit
+    (4th ed.), Kitware, ISBN 978-1-930934-19-1
+  url: https://vtk.org/
+- doi: 10.5281/ZENODO.3585752
+  text: Pape, C. (2019). constantinpape/z5
 covers:
 - description: Screenshot of a raw image next to the mesh generated from it and displayed
     using vtkplotlib.
@@ -28,6 +34,6 @@ solution_creators:
 tags:
 - mesh
 - cellsketch
-timestamp: '2023-06-19T09:58:34.461175'
+timestamp: '2023-07-02T19:33:14.761806'
 title: 'CellSketch: Display exported meshes'
 version: 0.1.0
