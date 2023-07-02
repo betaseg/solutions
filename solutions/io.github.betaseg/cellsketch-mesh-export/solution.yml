@@ -12,13 +12,20 @@ args:
   name: exclude
   required: false
   type: string
-- description: Do not display mesh after processing it. Set this to true if you run
+- default: false
+  description: Do not display mesh after processing it. Set this to true if you run
     into memory issues.
   name: headless
   type: boolean
 changelog: '- initial release
 
   '
+cite:
+- text: Schroeder, W.; Martin, K.; Lorensen, B. (2006). The Visualization Toolkit
+    (4th ed.), Kitware, ISBN 978-1-930934-19-1
+  url: https://vtk.org/
+- doi: 10.5281/ZENODO.3585752
+  text: Pape, C. (2019). constantinpape/z5
 covers:
 - description: Screenshot of a raw image next to the mesh generated from it and displayed
     using vtkplotlib.
@@ -29,6 +36,6 @@ group: io.github.betaseg
 name: cellsketch-mesh-export
 solution_creators:
 - Deborah Schmidt
-timestamp: '2023-06-19T09:58:07.275117'
+timestamp: '2023-07-02T19:31:13.011847'
 title: 'CellSketch: Export masks and labelmaps as meshes'
 version: 0.1.0
