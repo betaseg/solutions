@@ -36,6 +36,6 @@ group: io.github.betaseg
 name: cellsketch-mesh-export
 solution_creators:
 - Deborah Schmidt
-timestamp: '2023-07-02T19:31:13.011847'
+timestamp: '2023-07-04T02:24:42.010549'
 title: 'CellSketch: Export masks and labelmaps as meshes'
 version: 0.1.0
