@@ -1,3 +1,5 @@
+import shutil
+
 from album.runner.api import setup
 
 
@@ -20,6 +22,7 @@ def run():
     project = args.project
     to = get_app_path().joinpath("protocol-notebooks")
     notebook_path = to.joinpath('plots', 'run_plots.ipynb')
+    cell_lib_path = to.joinpath('plots', 'cell.py')
     parent_path = notebook_path.parent
     output_path = args.output
     assert (notebook_path.exists())
@@ -27,9 +30,11 @@ def run():
     Path(output_path).mkdir(exist_ok=True, parents=True)
     print("Saving plots to %s" % output_path)
     output_notebook = Path(output_path).joinpath("plots.ipynb")
+    output_cell_lib = Path(output_path).joinpath("cell.py")
 
     if not output_notebook.exists():
         try:
+            shutil.copyfile(cell_lib_path, output_cell_lib)
             pm.execute_notebook(notebook_path, str(output_notebook),
                                 parameters=dict(project=str(project), output=str(output_path)))
         except pm.exceptions.PapermillExecutionError:
