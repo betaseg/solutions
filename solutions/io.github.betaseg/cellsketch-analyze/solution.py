@@ -74,7 +74,9 @@ def calculate_edt(project, skip_existing_distance_maps, num_threads):
     masks = project_file.attrs['masks']
     labelmaps = project_file.attrs['labelmaps']
     filaments = project_file.attrs['filaments']
+    cell_bounds = project_file.attrs['cellbounds']
     to_be_processed = []
+    to_be_processed_inverted = []
 
     for mask in masks:
         to_be_processed.append(masks[mask])
@@ -82,11 +84,8 @@ def calculate_edt(project, skip_existing_distance_maps, num_threads):
         to_be_processed.append(labelmaps[labelmap])
     for filament in filaments:
         to_be_processed.append(filaments[filament])
-    if 'cellbounds' in project_file.attrs:
-        cellbound_volume = project_file.attrs['cellbounds']
-        if not cellbound_volume.startswith(project_name):
-            cellbound_volume = project_name + "_" + cellbound_volume
-        to_be_processed.append(cellbound_volume)
+    for cell_bound in cell_bounds:
+        to_be_processed_inverted.append(cell_bounds[cell_bound])
 
     analysis_group_name = 'analysis'
     # Check if group exists
@@ -115,8 +114,27 @@ def calculate_edt(project, skip_existing_distance_maps, num_threads):
 
         analysis_group.create_dataset(edt_result_file, data=dt, chunks=(64, 64, 64), dtype='float32')
 
+    for item in to_be_processed_inverted:
+        edt_result_file = item.lstrip(os.sep) + "_distance_map"
+        # Check if the dataset exists
+        if edt_result_file in analysis_group:
+            if skip_existing_distance_maps:
+                continue
+            dataset_path = os.path.join(project, analysis_group_name, edt_result_file)
 
-def load_as_mask(project, item):
+            # Delete the dataset folder
+            shutil.rmtree(dataset_path)
+
+        mask = load_as_mask(project_file, item, background_is_data=False)
+        dt = edt.edt(
+            np.ascontiguousarray(mask),
+            parallel=num_threads  # number of threads, <= 0 sets to num cpu
+        )
+
+        analysis_group.create_dataset(edt_result_file, data=dt, chunks=(64, 64, 64), dtype='float32')
+
+
+def load_as_mask(project, item, background_is_data=True):
     import numpy as np
     import os
     item = item.lstrip(os.sep)
@@ -124,7 +142,10 @@ def load_as_mask(project, item):
     project_item = project[item]
     data = np.array(project_item)
     # the edt used here calculates the distance of label pixels to the background - we need the opposite
-    data = data == 0
+    if background_is_data:
+        data = data == 0
+    else:
+        data = data != 0
     return data
 
 
