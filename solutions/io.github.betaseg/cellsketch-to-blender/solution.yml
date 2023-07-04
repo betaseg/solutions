@@ -52,6 +52,6 @@ group: io.github.betaseg
 name: cellsketch-to-blender
 solution_creators:
 - Deborah Schmidt
-timestamp: '2023-06-28T12:43:32.438852'
+timestamp: '2023-07-04T14:42:05.440399'
 title: 'CellSketch: Generate Blender scene from mesh files'
 version: 0.1.0
