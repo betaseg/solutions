@@ -21,6 +21,7 @@ def run():
     masks = project_file.attrs['masks']
     labelmaps = project_file.attrs['labelmaps']
     filaments = project_file.attrs['filaments']
+    cellbounds = project_file.attrs['cellbounds']
     meshes = []
     for mask in masks:
         if mask == "membrane border":
@@ -31,11 +32,8 @@ def run():
             import_dataset(include, exclude, project_file, output_path, labelmaps[labelmap]))
     for filament in filaments:
         meshes.append(import_dataset(include, exclude, project_file, output_path, filaments[filament]))
-    if 'cellbounds' in project_file.attrs:
-        cellbound_volume = str(project_file.attrs['cellbounds'])
-        if not cellbound_volume.startswith(project_name):
-            cellbound_volume = project_name + "_" + cellbound_volume
-        meshes.append(import_dataset(include, exclude, project_file, output_path, cellbound_volume))
+    for cellbound in cellbounds:
+        meshes.append(import_dataset(include, exclude, project_file, output_path, cellbounds[cellbound]))
 
     if meshes:
         figure = vpl.figure()
