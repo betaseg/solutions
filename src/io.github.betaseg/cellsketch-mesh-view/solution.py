@@ -18,10 +18,10 @@ def run():
     output_path.mkdir(exist_ok=True, parents=True)
     project_file = z5py.File(str(project))
     project_name = Path(project).name.rstrip(".n5")
-    masks = project_file.attrs['masks']
-    labelmaps = project_file.attrs['labelmaps']
-    filaments = project_file.attrs['filaments']
-    cellbounds = project_file.attrs['cellbounds']
+    masks = project_file.attrs['masks'] if 'masks' in project_file.attrs else []
+    labelmaps = project_file.attrs['labelmaps'] if 'labelmaps' in project_file.attrs else []
+    filaments = project_file.attrs['filaments'] if 'filaments' in project_file.attrs else []
+    cellbounds = project_file.attrs['cellbounds'] if 'cellbounds' in project_file.attrs else []
     meshes = []
     for mask in masks:
         if mask == "membrane border":
