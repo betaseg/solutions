@@ -103,8 +103,8 @@ setup(
         }, {
             "name": "color",
             "type": "string",
-            "default": "#ffffff",
-            "description": "Color of dataset in hex (i.e. #ffff00)"
+            "default": "255:155:0:255",
+            "description": "Color of dataset in RGBA separated by \":\" (i.e. 255:255:0:255)"
         }, {
             "name": "analyzeConnectionFilamentEnds",
             "type": "boolean",

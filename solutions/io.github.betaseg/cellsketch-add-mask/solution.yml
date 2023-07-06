@@ -24,8 +24,8 @@ args:
   description: Scale factor Z of input dataset
   name: scale_z
   type: float
-- default: '#ffffff'
-  description: 'Color of dataset in hex (i.e. #ffff00)'
+- default: 255:155:0:255
+  description: Color of dataset in RGBA separated by ":" (i.e. 255:255:0:255)
   name: color
   type: string
 - default: false
@@ -52,6 +52,6 @@ tags:
 - cellsketch
 - segmentation
 - annotation
-timestamp: '2023-07-04T15:35:54.480963'
+timestamp: '2023-07-07T01:23:11.753254'
 title: 'CellSketch: Add mask'
 version: 0.1.0
