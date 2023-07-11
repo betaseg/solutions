@@ -41,39 +41,58 @@ dependencies:
 def run():
     import numpy as np
     from tifffile import imread, imwrite
+    from csbdeep.utils import normalize_mi_ma 
     from model import UNet
     from pathlib import Path
 
     args = get_args()
+    
+    try:
+        norm_mi_ma = tuple(float(x) for x in args.normalize_mi_ma.split(","))
+    except: 
+        print('No normalization values given, using default percentile normalizion (ensure that this is the same as during training!)')
+        norm_mi_ma = None 
+    
+    try:
+        n_tiles = tuple(int(n) for n in args.n_tiles.split(","))
+    except: 
+        n_tiles = None 
 
-    def apply(model, x0):
-        x = x0.astype(np.float32) / 255.
-        n_tiles = tuple(int(np.ceil(s / 196)) for s in x0.shape)
-        y_full = model.predict(x, axes="ZYX", normalizer=None, n_tiles=n_tiles)
+
+    def apply(model, x, norm_mi_ma):
+        if norm_mi_ma is None: 
+            mi, ma = np.percentile(x[::4,::4,::4], (1, 99.8))
+        else: 
+            mi, ma = norm_mi_ma
+        print(f'normalizing with mi,ma = {mi}, {ma}')
+        x = normalize_mi_ma(x, mi, ma, dtype=np.float32)
+    
+        if n_tiles is None:    
+            _n_tiles = tuple(int(np.ceil(s / 128)) for s in x0.shape)
+            
+        print(f'predicting with n_tiles = {_n_tiles}')
+        y_full = model.predict(x, axes="ZYX", normalizer=None, n_tiles=_n_tiles)
 
         y = y_full >= 0.5
 
         return y
 
-    model = UNet(None, args.model_name, basedir=args.root)
+    model = UNet(None, '.', basedir=args.model)
 
     out = Path(args.outdir)
     out.mkdir(exist_ok=True, parents=True)
 
     # load file(s)
-    input_path = Path(args.fname_input)
+    input_path = Path(args.input)
     if input_path.is_dir():
-        for f in input_path.iterdir():
-            if f.suffix == ".tif":
-                x0 = imread(f)
-                y = apply(model, x0)
-
-                imwrite(out / f"{f.stem}.unet.tif", y.astype(np.uint16))
-    else:
-        x0 = imread(input_path)
-        y = apply(model, x0)
-
-        imwrite(out / f"{input_path.stem}.unet.tif", y.astype(np.uint16))
+        fnames = sorted(input_path.glob("*.tif"))
+    else: 
+        fnames = [input_path]
+        
+    for f in fnames:
+        x0 = imread(f)
+        y = apply(model, x0, norm_mi_ma)
+        imwrite(out / f"{f.stem}.unet.tif", y.astype(np.uint16))
 
 
 setup(
@@ -97,19 +116,21 @@ setup(
     }],
     args=[
         {
-            "name": "root",
-            "description": "root folder of your models.",
-            "type": "string",
-            "required": True
-        },
-        {
-            "name": "model_name",
+            "name": "model",
             "description": "Folder name in which the model is stored.",
             "type": "string",
             "required": True
         },
         {
-            "name": "fname_input",
+            "name": "normalize_mi_ma",
+            "description": "min and max to use for normalization, if not given use 1st and 99.8th percentile of each image",
+            "default": "",
+            "type": "string",
+            "required": False
+        },
+        
+        {
+            "name": "input",
             "description": "file path to your input image or folder. Should be tif file(s).",
             "type": "string",
             "required": True
@@ -119,6 +140,13 @@ setup(
             "description": "output folder",
             "type": "string",
             "required": True
+        },
+        {
+            "name": "n_tiles",
+            "description": "number of tiles per dimension to use for prediction (will be estimated by default)",
+            "type": "string",
+            "default": "",
+            "required": False
         },
 
     ],
