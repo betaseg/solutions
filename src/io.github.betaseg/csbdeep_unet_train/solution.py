@@ -93,6 +93,8 @@ def run():
 
     import numpy as np
     import time
+    import webbrowser
+    import os
     from datetime import datetime
     from csbdeep.utils import Path
     from csbdeep.utils.tf import limit_gpu_memory
@@ -100,7 +102,6 @@ def run():
     from augmend import Augmend, Elastic, Identity, FlipRot90, AdditiveNoise, IntensityScaleShift, IsotropicScale
     from model import UNetConfig, UNet
     from subprocess import Popen
-    import webbrowser
     np.random.seed(42)
 
     # process args:
@@ -108,6 +109,7 @@ def run():
     unet_pool_size = tuple(int(x) for x in args.unet_pool_size.split(","))
     train_class_weight = tuple(float(x) for x in args.train_class_weight.split(","))
     patch_size = tuple(int(x) for x in args.patch_size.split(","))
+    num_workers = 0 if os.name == 'nt' else args.num_workers
 
     try:
         norm_mi_ma = tuple(float(x) for x in args.normalize_mi_ma.split(","))
@@ -180,7 +182,7 @@ def run():
         webbrowser.open("http://localhost:6006", new=1)
 
     if args.epochs>0:
-        model.train(X,Y,Xv,Yv,augmenter=aug, epochs=args.epochs,steps_per_epoch=args.steps_per_epoch)
+        model.train(X,Y,Xv,Yv,augmenter=aug, epochs=args.epochs,steps_per_epoch=args.steps_per_epoch, num_workers=num_workers)
 
 
 setup(
@@ -309,6 +311,13 @@ setup(
             "default": False,
             "required": False
         },
+        {
+            "name": "num_workers",
+            "type": "integer",
+            "description": "Number of threads to use for training. On Windows, multiprocessing will be deactivated. Default: 4",
+            "default": 4,
+            "required": False
+        }
     ],
     run=run,
     dependencies={"environment_file": env_file},

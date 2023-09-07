@@ -255,7 +255,7 @@ class UNet(CARE):
         
         self.keras_model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
     
-    def train(self, X,Y, Xv, Yv, augmenter:Augmend=None, epochs=None, steps_per_epoch=None, care_tb_kwargs=None):
+    def train(self, X,Y, Xv, Yv, augmenter:Augmend=None, epochs=None, steps_per_epoch=None, care_tb_kwargs=None, num_workers=4):
         """Train the neural network with the given data.
         Parameters
         ----------
@@ -305,7 +305,7 @@ class UNet(CARE):
         fit = self.keras_model.fit_generator if IS_TF_1 else self.keras_model.fit
         history = fit(iter(self.data_train), validation_data=(xv, yv),
                       epochs=epochs, steps_per_epoch=steps_per_epoch,
-                      callbacks=self.callbacks, verbose=1)
+                      callbacks=self.callbacks, verbose=1, workers=num_workers)
         self._training_finished()
 
         return history    
