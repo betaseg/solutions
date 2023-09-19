@@ -60,7 +60,7 @@ def is_file_arg(arg_name):
 setup(
     group="io.github.betaseg",
     name="cellsketch-create-project",
-    version="0.1.0",
+    version="0.2.0",
     solution_creators=["Deborah Schmidt"],
     title="CellSketch: Create new project",
     description="This solution creates a new CellSketch project by importing the raw dataset as well as masks and labelings of cell components.",
@@ -110,12 +110,6 @@ setup(
     }],
     install=install,
     run=run,
-    dependencies={'environment_file': """channels:
-  - conda-forge
-  - defaults
-dependencies:
-  - python=3.9
-  - openjdk=11.0.9.1
-"""}
+    dependencies={"parent": {"resolve_solution": "io.github.betaseg:cellsketch-create-project:0.1.0"}}
 )
 
