@@ -16,7 +16,7 @@ args:
   description: Threads to use to calculate the distance transform maps.
   name: num_threads
   type: integer
-changelog: null
+changelog: Update CellSketch version
 cite:
 - doi: https://doi.org/10.1083/jcb.202010039
   text: "A. M\xFCller, D. Schmidt, C. S. Xu, S. Pang, J. V. D\u2019Costa, S. Kretschmar,\
@@ -44,6 +44,6 @@ tags:
 - segmentation
 - annotation
 - analysis
-timestamp: '2023-07-04T15:36:13.571235'
+timestamp: '2023-10-24T01:07:21.848419'
 title: 'CellSketch: Run spatial analysis'
-version: 0.1.0
+version: 0.2.0
