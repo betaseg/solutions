@@ -8,10 +8,6 @@ args:
   name: input
   required: true
   type: file
-- description: 'Type of the dataset. Possible choices: mask, labelmap, knossos'
-  name: type
-  required: true
-  type: string
 - description: The name of the dataset
   name: name
   required: true
@@ -57,6 +53,6 @@ tags:
 - cellsketch
 - segmentation
 - annotation
-timestamp: '2023-10-23T15:15:32.287972'
+timestamp: '2023-10-23T17:57:31.426283'
 title: 'CellSketch: Add KNOSSOS filament'
 version: 0.1.0

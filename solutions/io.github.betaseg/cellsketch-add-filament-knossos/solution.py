@@ -81,11 +81,6 @@ setup(
             "required": True,
             "description": "The dataset file (3D)"
         }, {
-            "name": "type",
-            "type": "string",
-            "required": True,
-            "description": "Type of the dataset. Possible choices: mask, labelmap, knossos"
-        }, {
             "name": "name",
             "type": "string",
             "required": True,
