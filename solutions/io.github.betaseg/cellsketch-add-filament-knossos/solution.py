@@ -122,6 +122,12 @@ setup(
         }],
     install=install,
     run=run,
-    dependencies={'parent': {'resolve_solution': 'io.github.betaseg:cellsketch-create-project:0.1.0'}}
+    dependencies={'environment_file': """channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - openjdk=11.0.9.1
+"""}
 )
 
