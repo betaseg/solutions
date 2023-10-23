@@ -17,6 +17,14 @@ args:
   required: true
   type: float
 - default: 1
+  description: Scale factor X for input dataset
+  name: scale_x
+  type: float
+- default: 1
+  description: Scale factor Y of input dataset
+  name: scale_y
+  type: float
+- default: 1
   description: Scale factor Z of input dataset
   name: scale_z
   type: float
@@ -24,7 +32,7 @@ args:
   description: Do not open the CellSketch Viewer after creating the project
   name: headless
   type: boolean
-changelog: null
+changelog: Add x, y scale
 cite:
 - doi: https://doi.org/10.1083/jcb.202010039
   text: "A. M\xFCller, D. Schmidt, C. S. Xu, S. Pang, J. V. D\u2019Costa, S. Kretschmar,\
@@ -50,6 +58,6 @@ tags:
 - cellsketch
 - segmentation
 - annotation
-timestamp: '2023-09-19T09:00:40.013663'
+timestamp: '2023-10-23T17:20:00.563461'
 title: 'CellSketch: Create new project'
-version: 0.2.0
+version: 0.2.1
