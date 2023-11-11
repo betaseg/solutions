@@ -161,7 +161,7 @@ def is_file_arg(arg_name):
 setup(
     group="io.github.betaseg",
     name="cellsketch-analyze",
-    version="0.1.0",
+    version="0.2.0",
     solution_creators=["Deborah Schmidt"],
     title="CellSketch: Run spatial analysis",
     description="This solution performs spatial analysis for all organelles in a CellSketch project.",

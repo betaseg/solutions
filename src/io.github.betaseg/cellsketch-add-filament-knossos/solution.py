@@ -59,11 +59,11 @@ def is_file_arg(arg_name):
 
 setup(
     group="io.github.betaseg",
-    name="cellsketch-add-mask",
-    version="0.2.0",
+    name="cellsketch-add-filament-knossos",
+    version="0.1.0",
     solution_creators=["Deborah Schmidt"],
-    title="CellSketch: Add mask",
-    description="This solution adds a mask to an existing CellSketch project.",
+    title="CellSketch: Add KNOSSOS filament",
+    description="This solution adds a KNOSSOS filament XML file to an existing CellSketch project.",
     tags=["cellsketch", "segmentation", "annotation"],
     cite=[{
         "text": "A. Müller, D. Schmidt, C. S. Xu, S. Pang, J. V. D’Costa, S. Kretschmar, C. Münster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D FIB-SEM reconstruction of microtubule–organelle interaction in whole primary mouse β cells. J Cell Biol 1 February 2021; 220 (2): e202010039.",
@@ -103,13 +103,12 @@ setup(
         }, {
             "name": "color",
             "type": "string",
-            "default": "255:155:0:255",
-            "description": "Color of dataset in RGBA separated by \":\" (i.e. 255:255:0:255)"
+            "default": "255:255:255:255",
+            "description": "Color of dataset in red:green:blue:alpha where all values can be 0-255 (i.e. 255:255:0:255)"
         }, {
-            "name": "analyzeConnectionFilamentEnds",
-            "type": "boolean",
-            "default": False,
-            "description": "Analyze connection to filaments ends"
+            "name": "radius",
+            "type": "float",
+            "description": "Filaments radius in μm"
         }, {
             "name": "thresholdConnectionFilamentEnds",
             "type": "float",

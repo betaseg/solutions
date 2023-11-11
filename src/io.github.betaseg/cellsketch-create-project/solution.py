@@ -60,7 +60,7 @@ def is_file_arg(arg_name):
 setup(
     group="io.github.betaseg",
     name="cellsketch-create-project",
-    version="0.1.0",
+    version="0.2.1",
     solution_creators=["Deborah Schmidt"],
     title="CellSketch: Create new project",
     description="This solution creates a new CellSketch project by importing the raw dataset as well as masks and labelings of cell components.",
@@ -93,6 +93,16 @@ setup(
             "type": "float",
             "required": True,
             "description": "Unit conversion factor from pixels to micrometers"
+        }, {
+            "name": "scale_x",
+            "type": "float",
+            "default": 1,
+            "description": "Scale factor X for input dataset"
+        }, {
+            "name": "scale_y",
+            "type": "float",
+            "default": 1,
+            "description": "Scale factor Y of input dataset"
         }, {
             "name": "scale_z",
             "type": "float",
