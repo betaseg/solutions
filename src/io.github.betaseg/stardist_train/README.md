@@ -33,5 +33,6 @@ Start the solution by only providing the root folder of the data (argument named
 and the output folder (argument named "out") to reproduce the results of the paper. 
 This way the solution trains a 3D stardist model for 100 epochs.
 
-# todo: reproducable call
+## reproducable call
+album run io.github.betaseg:stardist_train:0.1.0 --root path/to/granules --out path/to/granules_results 
 

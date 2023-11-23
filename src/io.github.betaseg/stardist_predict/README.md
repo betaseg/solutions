@@ -32,4 +32,9 @@ data_granules
 
 The model must be received by calling the StarDist train album solution first.
 
-# todo: reproducable call
+## reproducable call:
+album run io.github.betaseg:stardist_predict:0.1.0 
+    --fname_input /path/to/my.tiff 
+    --model_name my_model_folder_name 
+    --model_basedir /path/to/my_models_folders
+    --output_dir  path/to/output_dir 

@@ -11,7 +11,7 @@ The extensive documentation of CSBDeep can be found at http://csbdeep.bioimageco
 ![](golgi.png)
 
 This demonstrates how to use the solution to train a 3D U-Net model to perform semantic segmentation of the golgi
-aparatus from 3D FIB-SEM data
+aparatus from 3D FIB-SEM data.
 The procedure is described in the paper:
 
 Müller, Andreas, et al. "3D FIB-SEM reconstruction of microtubule–organelle interaction in whole primary mouse β cells."
@@ -33,4 +33,8 @@ data_golgi
 
 Call the solution by only providing the root folder of the data to reproduce the results of the paper.
 
-# todo: reproducable call
+## reproducable call
+album run io.github.betaseg:csbdeep_unet_predict:0.1.0 
+    --model /path/to/my_model 
+    --input /path/to/my_input
+    --outdir /path/to/my_output
