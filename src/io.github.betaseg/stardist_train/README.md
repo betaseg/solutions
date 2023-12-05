@@ -13,7 +13,7 @@ The extensive documentation of StarDist can be found at https://github.com/stard
 This demonstrates how to use this solution to train a Stardist model to segment secretory granules from 3D FIB-SEM data.
 The procedure is described in the paper:
 
-Müller, Andreas, et al. "3D FIB-SEM reconstruction of microtubule–organelle interaction in whole primary mouse β cells." Journal of Cell Biology 220.2 (2021).
+Müller, Andreas, et al. "3D FIB-SEM reconstruction of microtubule-organelle interaction in whole primary mouse β cells." Journal of Cell Biology 220.2 (2021).
 
 Download the example data (or adapt your own data into the same format)
 

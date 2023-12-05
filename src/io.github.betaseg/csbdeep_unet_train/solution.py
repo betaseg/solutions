@@ -201,7 +201,7 @@ setup(
     album_api_version="0.5.5",
     cite=[{
         "text": "Weigert, Martin, et al. \"Content-aware image restoration: pushing the limits of fluorescence microscopy.\" Nature methods 15.12 (2018): 1090-1097.",
-        "doi": "15.12 (2018): 1090–1097."
+        "doi": "15.12 (2018): 1090-1097."
     }],
     documentation=["README.md"],
     args=[
