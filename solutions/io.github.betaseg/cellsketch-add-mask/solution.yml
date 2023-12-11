@@ -36,7 +36,7 @@ args:
   name: thresholdConnectionFilamentEnds
   required: false
   type: float
-changelog: null
+changelog: Update betaseg version
 cite:
 - doi: https://doi.org/10.1083/jcb.202010039
   text: "A. M\xFCller, D. Schmidt, C. S. Xu, S. Pang, J. V. D\u2019Costa, S. Kretschmar,\
@@ -52,6 +52,6 @@ tags:
 - cellsketch
 - segmentation
 - annotation
-timestamp: '2023-07-07T01:23:11.753254'
+timestamp: '2023-12-11T12:19:58.726757'
 title: 'CellSketch: Add mask'
-version: 0.1.0
+version: 0.2.0
