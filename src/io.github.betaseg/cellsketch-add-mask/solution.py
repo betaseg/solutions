@@ -60,7 +60,7 @@ def is_file_arg(arg_name):
 setup(
     group="io.github.betaseg",
     name="cellsketch-add-mask",
-    version="0.1.0",
+    version="0.2.0",
     solution_creators=["Deborah Schmidt"],
     title="CellSketch: Add mask",
     description="This solution adds a mask to an existing CellSketch project.",
@@ -118,6 +118,12 @@ setup(
         }],
     install=install,
     run=run,
-    dependencies={'parent': {'resolve_solution': 'io.github.betaseg:cellsketch-create-project:0.1.0'}}
+    dependencies={'environment_file': """channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - openjdk=11.0.9.1
+"""}
 )
 
