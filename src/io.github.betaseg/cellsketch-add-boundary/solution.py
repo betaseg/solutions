@@ -59,11 +59,11 @@ def is_file_arg(arg_name):
 
 setup(
     group="io.github.betaseg",
-    name="cellsketch-add-mask",
+    name="cellsketch-add-boundary",
     version="0.2.0",
     solution_creators=["Deborah Schmidt"],
-    title="CellSketch: Add mask",
-    description="This solution adds a mask to an existing CellSketch project.",
+    title="CellSketch: Add boundary",
+    description="This solution adds cell boundary (a filled mask) to an existing CellSketch project.",
     tags=["cellsketch", "segmentation", "annotation"],
     cite=[{
         "text": "A. Müller, D. Schmidt, C. S. Xu, S. Pang, J. V. D'Costa, S. Kretschmar, C. Münster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D FIB-SEM reconstruction of microtubule-organelle interaction in whole primary mouse β cells. J Cell Biol 1 February 2021; 220 (2): e202010039.",
@@ -79,7 +79,7 @@ setup(
             "name": "input",
             "type": "file",
             "required": True,
-            "description": "The dataset file (3D)"
+            "description": "The dataset file (3D, filled mask)"
         }, {
             "name": "name",
             "type": "string",

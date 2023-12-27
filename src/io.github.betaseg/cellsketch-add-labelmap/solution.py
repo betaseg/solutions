@@ -60,13 +60,13 @@ def is_file_arg(arg_name):
 setup(
     group="io.github.betaseg",
     name="cellsketch-add-labelmap",
-    version="0.1.0",
+    version="0.2.0",
     solution_creators=["Deborah Schmidt"],
     title="CellSketch: Add labelmap",
     description="This solution adds a labelmap to an existing CellSketch project.",
     tags=["cellsketch", "segmentation", "annotation"],
     cite=[{
-        "text": "A. Müller, D. Schmidt, C. S. Xu, S. Pang, J. V. D’Costa, S. Kretschmar, C. Münster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D FIB-SEM reconstruction of microtubule–organelle interaction in whole primary mouse β cells. J Cell Biol 1 February 2021; 220 (2): e202010039.",
+        "text": "A. Müller, D. Schmidt, C. S. Xu, S. Pang, J. V. D'Costa, S. Kretschmar, C. Münster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D FIB-SEM reconstruction of microtubule-organelle interaction in whole primary mouse β cells. J Cell Biol 1 February 2021; 220 (2): e202010039.",
         "doi": "https://doi.org/10.1083/jcb.202010039"
     }],
     album_api_version="0.5.5",
@@ -118,6 +118,12 @@ setup(
         }],
     install=install,
     run=run,
-    dependencies={'parent': {'resolve_solution': 'io.github.betaseg:cellsketch-create-project:0.1.0'}}
+    dependencies={'environment_file': """channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - openjdk=11.0.9.1
+"""}
 )
 

@@ -57,19 +57,19 @@ def is_file_arg(arg_name):
 setup(
     group="io.github.betaseg",
     name="cellsketch-pixel-view",
-    version="0.1.0",
+    version="0.2.0",
     solution_creators=["Deborah Schmidt"],
     title="CellSketch: Display data in BigDataViewer",
     description="This solution displays a CellSketch project in BDV.",
     tags=["bdv", "cellsketch", "segmentation", "annotation"],
     cite=[{
-        "text": "A. Müller, D. Schmidt, C. S. Xu, S. Pang, J. V. D’Costa, S. Kretschmar, C. Münster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D FIB-SEM reconstruction of microtubule–organelle interaction in whole primary mouse β cells. J Cell Biol 1 February 2021; 220 (2): e202010039.",
+        "text": "A. Müller, D. Schmidt, C. S. Xu, S. Pang, J. V. D'Costa, S. Kretschmar, C. Münster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D FIB-SEM reconstruction of microtubule-organelle interaction in whole primary mouse β cells. J Cell Biol 1 February 2021; 220 (2): e202010039.",
         "doi": "https://doi.org/10.1083/jcb.202010039"
     }, {
-        "text": "Pietzsch, T., Saalfeld, S., Preibisch, S., & Tomancak, P. (2015). BigDataViewer: visualization and processing for large image data sets. Nature Methods, 12(6), 481–483.",
+        "text": "Pietzsch, T., Saalfeld, S., Preibisch, S., & Tomancak, P. (2015). BigDataViewer: visualization and processing for large image data sets. Nature Methods, 12(6), 481-483.",
         "doi": "10.1038/nmeth.3392"
     }],
-    album_api_version="0.5.3",
+    album_api_version="0.5.5",
     args=[{
             "name": "project",
             "type": "directory",
@@ -82,6 +82,12 @@ setup(
     }],
     install=install,
     run=run,
-    dependencies={'parent': {'resolve_solution': 'io.github.betaseg:cellsketch-create-project:0.1.0'}}
+    dependencies={'environment_file': """channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - openjdk=11.0.9.1
+"""}
 )
 

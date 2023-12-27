@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.betaseg:cellsketch:0.2.1'
+    implementation 'com.github.betaseg:cellsketch:0.2.3'
 }
 configurations.all {
   exclude group: 'com.github.jnr', module: 'jffi'

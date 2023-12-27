@@ -60,16 +60,16 @@ def is_file_arg(arg_name):
 setup(
     group="io.github.betaseg",
     name="cellsketch-create-project",
-    version="0.1.0",
+    version="0.2.1",
     solution_creators=["Deborah Schmidt"],
     title="CellSketch: Create new project",
     description="This solution creates a new CellSketch project by importing the raw dataset as well as masks and labelings of cell components.",
     tags=["bdv", "cellsketch", "segmentation", "annotation"],
     cite=[{
-        "text": "A. Müller, D. Schmidt, C. S. Xu, S. Pang, J. V. D’Costa, S. Kretschmar, C. Münster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D FIB-SEM reconstruction of microtubule–organelle interaction in whole primary mouse β cells. J Cell Biol 1 February 2021; 220 (2): e202010039.",
+        "text": "A. Müller, D. Schmidt, C. S. Xu, S. Pang, J. V. D'Costa, S. Kretschmar, C. Münster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D FIB-SEM reconstruction of microtubule-organelle interaction in whole primary mouse β cells. J Cell Biol 1 February 2021; 220 (2): e202010039.",
         "doi": "https://doi.org/10.1083/jcb.202010039"
     }, {
-        "text": "Pietzsch, T., Saalfeld, S., Preibisch, S., & Tomancak, P. (2015). BigDataViewer: visualization and processing for large image data sets. Nature Methods, 12(6), 481–483.",
+        "text": "Pietzsch, T., Saalfeld, S., Preibisch, S., & Tomancak, P. (2015). BigDataViewer: visualization and processing for large image data sets. Nature Methods, 12(6), 481-483.",
         "doi": "10.1038/nmeth.3392"
     }],
     album_api_version="0.5.5",
@@ -94,6 +94,16 @@ setup(
             "required": True,
             "description": "Unit conversion factor from pixels to micrometers"
         }, {
+            "name": "scale_x",
+            "type": "float",
+            "default": 1,
+            "description": "Scale factor X for input dataset"
+        }, {
+            "name": "scale_y",
+            "type": "float",
+            "default": 1,
+            "description": "Scale factor Y of input dataset"
+        }, {
             "name": "scale_z",
             "type": "float",
             "default": 1,
@@ -110,12 +120,6 @@ setup(
     }],
     install=install,
     run=run,
-    dependencies={'environment_file': """channels:
-  - conda-forge
-  - defaults
-dependencies:
-  - python=3.9
-  - openjdk=11.0.9.1
-"""}
+    dependencies={"parent": {"resolve_solution": "io.github.betaseg:cellsketch-create-project:0.1.0"}}
 )
 
