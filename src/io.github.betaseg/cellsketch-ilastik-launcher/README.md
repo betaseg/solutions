@@ -22,11 +22,10 @@ album run segmentation:ilastik-launcher:0.1.0
 ilastik requires a 64-bit operating system and at least 8GB of RAM. For more information, please refer to the [ilastik documentation](https://www.ilastik.org/documentation/basics/installation#requirements).
 
 ## Citation & License
-This solution is unlicensed. For more information, please refer to the [ilastik documentation](https://www.ilastik.org/documentation).
+This solution is is under GNU General Public License version 2 or later with exception to allow non-GPL extensions. For more information, please refer to the [ilastik documentation](https://www.ilastik.org/license).
 
 If you use this solution, please cite the following paper: 
 ```
 text: Berg, S., Kutra, D., Kroeger, T. et al. ilastik: interactive machine learning for (bio)image analysis. Nat Methods 16, 1226–1232 (2019).
 doi: 10.1038/s41592-019-0582-9
 ```
-

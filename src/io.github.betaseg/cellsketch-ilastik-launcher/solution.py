@@ -33,7 +33,7 @@ setup(
     }],
     documentation=["README.md"],
     tags=["ilastik", "machine learning", "interactive", "open source", "image segmentation", "imaging", "python", "qt"],
-    license="unlicense",
+    license="GNU General Public License version 2 or later with exception to allow non-GPL extensions",
     album_api_version="0.5.5",
     args=[],
     run=run,
