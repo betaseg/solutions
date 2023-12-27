@@ -1,4 +1,4 @@
-album_api_version: 0.5.3
+album_api_version: 0.5.5
 args:
 - description: The CellSketch project to be opened (.n5).
   name: project
@@ -28,6 +28,6 @@ tags:
 - cellsketch
 - segmentation
 - annotation
-timestamp: '2023-07-04T15:52:35.939950'
+timestamp: '2023-11-11T12:37:03.125499'
 title: 'CellSketch: Display data in BigDataViewer'
-version: 0.1.0
+version: 0.2.0

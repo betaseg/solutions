@@ -54,6 +54,6 @@ tags:
 - cellsketch
 - segmentation
 - annotation
-timestamp: '2023-07-04T15:35:30.752416'
+timestamp: '2023-11-11T12:39:13.382913'
 title: 'CellSketch: Add labelmap'
-version: 0.1.0
+version: 0.2.0
