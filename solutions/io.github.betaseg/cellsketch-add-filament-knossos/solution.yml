@@ -29,20 +29,22 @@ args:
     (i.e. 255:255:0:255)
   name: color
   type: string
-- description: "Filaments radius in \u03BCm"
+- description: "Filaments radius in \xCE\xBCm"
   name: radius
   type: float
 - description: Threshold to count filament ends as connected in um
   name: thresholdConnectionFilamentEnds
   required: false
   type: float
-changelog: Initial version.
+changelog: 'Initial version.
+
+  '
 cite:
 - doi: https://doi.org/10.1083/jcb.202010039
-  text: "A. M\xFCller, D. Schmidt, C. S. Xu, S. Pang, J. V. D\u2019Costa, S. Kretschmar,\
-    \ C. M\xFCnster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D FIB-SEM\
-    \ reconstruction of microtubule\u2013organelle interaction in whole primary mouse\
-    \ \u03B2 cells. J Cell Biol 1 February 2021; 220 (2): e202010039."
+  text: "A. M\xC3\xBCller, D. Schmidt, C. S. Xu, S. Pang, J. V. D'Costa, S. Kretschmar,\
+    \ C. M\xC3\xBCnster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D\
+    \ FIB-SEM reconstruction of microtubule-organelle interaction in whole primary\
+    \ mouse \xCE\xB2 cells. J Cell Biol 1 February 2021; 220 (2): e202010039."
 description: This solution adds a KNOSSOS filament XML file to an existing CellSketch
   project.
 group: io.github.betaseg
@@ -53,6 +55,6 @@ tags:
 - cellsketch
 - segmentation
 - annotation
-timestamp: '2023-10-23T17:57:31.426283'
+timestamp: '2023-12-28T20:32:34.219046'
 title: 'CellSketch: Add KNOSSOS filament'
 version: 0.1.0
