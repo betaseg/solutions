@@ -1,12 +1,13 @@
 album_api_version: 0.5.5
 args:
-- description: Path to the input file.
+- description: Path of the input tif file or folder of tif images.
   name: fname_input
   required: true
-- description: Path to the input model.
+- description: Name of the folder in which the input model is stored.
   name: model_name
   required: true
-- description: Path to the model directory.
+- description: Path to the directory that contains the folders (model_name) for each
+    individual model.
   name: model_basedir
   required: true
 - description: Path to the output directory.
@@ -42,6 +43,6 @@ solution_creators:
 tags:
 - StarDist
 - machine learning
-timestamp: '2023-06-26T12:18:40.765095'
+timestamp: '2023-12-28T20:34:59.537466'
 title: StarDist Predict
 version: 0.1.0
