@@ -32,17 +32,19 @@ args:
   description: Do not open the CellSketch Viewer after creating the project
   name: headless
   type: boolean
-changelog: Add x, y scale
+changelog: 'Add x, y scale
+
+  '
 cite:
 - doi: https://doi.org/10.1083/jcb.202010039
-  text: "A. M\xFCller, D. Schmidt, C. S. Xu, S. Pang, J. V. D\u2019Costa, S. Kretschmar,\
-    \ C. M\xFCnster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D FIB-SEM\
-    \ reconstruction of microtubule\u2013organelle interaction in whole primary mouse\
-    \ \u03B2 cells. J Cell Biol 1 February 2021; 220 (2): e202010039."
+  text: "A. M\xC3\xBCller, D. Schmidt, C. S. Xu, S. Pang, J. V. D'Costa, S. Kretschmar,\
+    \ C. M\xC3\xBCnster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D\
+    \ FIB-SEM reconstruction of microtubule-organelle interaction in whole primary\
+    \ mouse \xCE\xB2 cells. J Cell Biol 1 February 2021; 220 (2): e202010039."
 - doi: 10.1038/nmeth.3392
-  text: "Pietzsch, T., Saalfeld, S., Preibisch, S., & Tomancak, P. (2015). BigDataViewer:\
-    \ visualization and processing for large image data sets. Nature Methods, 12(6),\
-    \ 481\u2013483."
+  text: 'Pietzsch, T., Saalfeld, S., Preibisch, S., & Tomancak, P. (2015). BigDataViewer:
+    visualization and processing for large image data sets. Nature Methods, 12(6),
+    481-483.'
 covers:
 - description: These are exemplary masks which this solution imports into a joint
     BDV project.
@@ -58,6 +60,6 @@ tags:
 - cellsketch
 - segmentation
 - annotation
-timestamp: '2023-10-23T17:20:00.563461'
+timestamp: '2023-12-28T20:33:06.687915'
 title: 'CellSketch: Create new project'
 version: 0.2.1
