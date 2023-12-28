@@ -2,8 +2,8 @@ album_api_version: 0.5.5
 args: []
 changelog: null
 cite:
-- text: "Berg, S., Kutra, D., Kroeger, T. et al. ilastik: interactive machine learning\
-    \ for (bio)image analysis. Nat Methods 16, 1226\u20131232 (2019)."
+- text: 'Berg, S., Kutra, D., Kroeger, T. et al. ilastik: interactive machine learning
+    for (bio)image analysis. Nat Methods 16, 1226-1232 (2019).'
   url: https://doi.org/10.1038/s41592-019-0582-9
 covers:
 - description: Logo of the ilastik suite.
@@ -12,7 +12,8 @@ description: An album solution to run ilastik
 documentation:
 - README.md
 group: io.github.betaseg
-license: unlicense
+license: GNU General Public License version 2 or later with exception to allow non-GPL
+  extensions
 name: cellsketch-ilastik-launcher
 solution_creators:
 - Dominik Kutra
@@ -26,6 +27,6 @@ tags:
 - imaging
 - python
 - qt
-timestamp: '2023-06-21T14:01:41.053705'
+timestamp: '2023-12-28T20:33:15.798394'
 title: ilastik-Launcher
 version: 0.1.0
