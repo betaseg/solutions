@@ -151,7 +151,7 @@ def run():
 
 
 setup(
-    group="de.mdc-berlin",
+    group="io.github.betaseg",
     name="cellsketch-launch-blender",
     version="0.1.0",
     album_api_version="0.5.5",
