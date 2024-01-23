@@ -182,7 +182,7 @@ setup(
     title="CellSketch: Generate Blender scene from mesh files",
     description="This solution imports STL files from a CellSketch project into the same scene, optionally reducing their mesh complexity and rendering the scene.",
     covers=[{
-        "description": "This rendering was generated based on data from the following publication: Andreas Müller, Deborah Schmidt, C. Shan Xu, Song Pang, Joyson Verner D’Costa, Susanne Kretschmar, Carla Münster, Thomas Kurth, Florian Jug, Martin Weigert, Harald F. Hess, Michele Solimena; 3D FIB-SEM reconstruction of microtubule–organelle interaction in whole primary mouse β cells. J Cell Biol 1 February 2021; 220 (2): e202010039. doi: https://doi.org/10.1083/jcb.202010039",
+        "description": "This rendering was generated based on data from the following publication: Andreas Müller, Deborah Schmidt, C. Shan Xu, Song Pang, Joyson Verner D'Costa, Susanne Kretschmar, Carla Münster, Thomas Kurth, Florian Jug, Martin Weigert, Harald F. Hess, Michele Solimena; 3D FIB-SEM reconstruction of microtubule-organelle interaction in whole primary mouse β cells. J Cell Biol 1 February 2021; 220 (2): e202010039. doi: https://doi.org/10.1083/jcb.202010039",
         "source": "cover.png"
     }],
     run=run,

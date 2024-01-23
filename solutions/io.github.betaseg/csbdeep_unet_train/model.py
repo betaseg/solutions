@@ -1,31 +1,85 @@
+""" 
+
+A 2D/3D Unet class with some goodies (eg. tiled prediction)
+"""
+
 import numpy as np
-from six.moves import range, zip, map
-from six import string_types
 import warnings
+import tensorflow as tf
 from csbdeep.models import CARE, Config
 from csbdeep.utils import _raise, axes_check_and_normalize, axes_dict, backend_channels_last
 from csbdeep.data import PercentileNormalizer, PadAndCropResizer
 from csbdeep.utils.tf import IS_TF_1, CARETensorBoardImage, keras_import
 from csbdeep.internals import train
 from csbdeep.internals.nets import custom_unet
+from csbdeep.internals.train import RollingSequence
 from csbdeep.internals.predict import predict_tiled, tile_overlap, Progress, total_n_tiles
+from augmend import Augmend, RandomCrop
 
 Adam = keras_import('optimizers', 'Adam')
 K = keras_import("backend")
 
 
+class DataWrapper(RollingSequence):
+
+    def __init__(self, X, Y, batch_size, length, patch_size, augmenter=None):
+        super(DataWrapper, self).__init__(data_size=len(X), batch_size=batch_size, length=length, shuffle=True)
+        len(X) == len(Y) or _raise(ValueError("X and Y must have same length"))
+        self.X, self.Y = X, Y
+        self.augmenter = augmenter
+        self.patch_size = tuple(patch_size)
+        self.cropper = Augmend()
+        self.cropper.add([RandomCrop(patch_size + (X[0].shape[-1],)), RandomCrop(patch_size + (Y[0].shape[-1],))])
+
+    def __getitem__(self, i):
+        idx = self.batch(i)
+        x, y = [self.X[i] for i in idx], [self.Y[i] for i in idx]
+        X, Y = [], []
+        for _x, _y in zip(x, y):
+            _x, _y = self.cropper([_x, _y])
+            if self.augmenter is not None:
+                _x, _y = self.augmenter([_x, _y])
+            X.append(_x)
+            Y.append(_y)
+        X = np.stack(X)
+        Y = np.stack(Y)
+        return X, Y
+
+
 class UNetConfig(Config):
-    def __init__(self, **kwargs):
-        kwargs.setdefault("train_class_weight", (1, 1))
+    def __init__(self, n_dim: int = 2, n_channel_in: int = 1, n_channel_out: int = 1, patch_size: tuple = None,
+                 train_loss: str = None, **kwargs):
+        if not n_dim in (2, 3):
+            raise ValueError(f"Invalid number of dimensions: {n_dim} (can be 2 or 3)")
+
+        if patch_size is None:
+            patch_size = (128,) * n_dim
+
+        if train_loss is None:
+            train_loss = "dice_bce" if n_channel_out == 1 else "dice_cce"
+
+        kwargs.setdefault("train_class_weight", (1,) * (2 if n_channel_out == 1 else n_channel_out))
+        kwargs.setdefault("axes", "XY" if n_dim == 2 else "ZYX")
         kwargs.setdefault("unet_kern_size", 3)
-        kwargs.setdefault("n_channel_out", 1)
+        kwargs.setdefault("n_channel_in", n_channel_in)
+        kwargs.setdefault("n_channel_out", n_channel_out)
         kwargs.setdefault("unet_batch_norm", False)
         kwargs.setdefault("unet_dropout", 0.)
+        kwargs.setdefault("unet_n_depth", 4)
+        kwargs.setdefault("patch_size", patch_size)
+
+        if not len(kwargs['train_class_weight']) == (2 if n_channel_out == 1 else n_channel_out):
+            raise ValueError(
+                f"Invalid number of class weights: {len(kwargs['train_class_weight'])} (expected {2 if n_channel_out == 1 else n_channel_out} )")
 
         super().__init__(allow_new_parameters=True, **kwargs)
+
+        if not len(self.patch_size) == self.n_dim:
+            raise ValueError(f"Invalid patch size: {self.patch_size} (expected {self.n_dim} values)")
+
         self.probabilistic = False
         self.unet_residual = False
-        self.train_loss = "binary_crossentropy" if self.n_channel_out == 1 else "categorical_crossentropy"
+        self.train_loss = train_loss
         self.unet_last_activation = "sigmoid" if self.n_channel_out == 1 else "softmax"
 
     def is_valid(self, return_invalid=False):
@@ -51,6 +105,7 @@ class UNetConfig(Config):
         except Exception as e:
             print(e)
             ok['axes'] = False
+
         ok['n_channel_in'] = _is_int(self.n_channel_in, 1)
         ok['n_channel_out'] = _is_int(self.n_channel_out, 1)
         ok['probabilistic'] = isinstance(self.probabilistic, bool)
@@ -66,16 +121,17 @@ class UNetConfig(Config):
                 and self.unet_input_shape[-1] == self.n_channel_in
             # and all((d is None or (_is_int(d) and d%(2**self.unet_n_depth)==0) for d in self.unet_input_shape[:-1]))
         )
-        ok['train_loss'] = self.train_loss in ('binary_crossentropy', 'categorical_crossentropy')
+        ok['train_loss'] = self.train_loss in (
+            'binary_crossentropy', 'categorical_crossentropy', 'dice_cce', 'dice_bce')
         ok['train_epochs'] = _is_int(self.train_epochs, 1)
         ok['train_steps_per_epoch'] = _is_int(self.train_steps_per_epoch, 1)
         ok['train_learning_rate'] = np.isscalar(self.train_learning_rate) and self.train_learning_rate > 0
         ok['train_batch_size'] = _is_int(self.train_batch_size, 1)
         ok['train_tensorboard'] = isinstance(self.train_tensorboard, bool)
-        ok['train_checkpoint'] = self.train_checkpoint is None or isinstance(self.train_checkpoint, string_types)
         ok['train_reduce_lr'] = self.train_reduce_lr is None or isinstance(self.train_reduce_lr, dict)
 
-        ok['train_class_weight'] = len(self.train_class_weight) == max(2, self.n_channel_out)
+        ok['train_class_weight'] = len(self.train_class_weight) == (
+            2 if self.n_channel_out == 1 else self.n_channel_out)
 
         if return_invalid:
             return all(ok.values()), tuple(k for (k, v) in ok.items() if not v)
@@ -111,7 +167,14 @@ def dice_loss(y_true, y_pred):
     return 1. - (2. * intersection + K.epsilon()) / (union + K.epsilon())
 
 
-def dice_bce(bce_weights=(1, 1), dice_weight=1):
+def dice_loss_multiclass(y_true, y_pred, axis):
+    inter = K.sum(y_true * y_pred, axis) + K.epsilon()
+    union = K.sum(y_true + y_pred, axis) + K.epsilon()
+    dice_loss = 1. - (2. * inter + K.epsilon()) / (union + K.epsilon())
+    return dice_loss
+
+
+def dice_bce(bce_weights=(1, 1), dice_weight=0.5):
     _bce = weighted_bce(weights=bce_weights)
 
     def _loss(y_true, y_pred):
@@ -121,12 +184,28 @@ def dice_bce(bce_weights=(1, 1), dice_weight=1):
     return _loss
 
 
-def metric_precision(y_true, y_pred):
-    y_pred = K.round(y_pred)
-    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-    predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
-    precision = true_positives / (predicted_positives + K.epsilon())
-    return precision
+def dice_cce(cce_weights, n_dim, dice_weight=0.5):
+    _cce = weighted_cce(weights=cce_weights)
+    axis = (1, 2) if n_dim == 2 else (1, 2, 3)
+
+    def _loss(y_true, y_pred):
+        dice_loss = dice_loss_multiclass(y_true, y_pred, axis=axis)
+        return dice_weight * K.mean(dice_loss) + _cce(y_true, y_pred)
+
+    return _loss
+
+
+def metric_dice(y_true, y_pred):
+    return 1 - dice_loss(y_true, y_pred)
+
+
+def metric_dice_multi(n_dim):
+    axis = (1, 2) if n_dim == 2 else (1, 2, 3)
+
+    def _metric_dice_cce(y_true, y_pred):
+        return 1 - dice_loss_multiclass(y_true, y_pred, axis=axis)
+
+    return _metric_dice_cce
 
 
 def metric_recall(y_true, y_pred):
@@ -146,6 +225,12 @@ def metric_f1(y_true, y_pred):
     recall = true_positives / (possible_positives + K.epsilon())
     f1 = 2 * (precision * recall) / (precision + recall + K.epsilon())
     return f1
+
+
+def check_shape(x, n_dim: int, n_channels: int):
+    if not x.ndim == n_dim + 1 and x.shape[-1] == n_channels:
+        raise ValueError(
+            f"Expected {n_dim + 1}D tensor with last dimension {n_channels} but got tensor with shape {x.shape}")
 
 
 class UNet(CARE):
@@ -170,22 +255,28 @@ class UNet(CARE):
     def prepare_for_training(self, optimizer=None, **kwargs):
         tmp = self.config.train_loss
         self.config.train_loss = 'mse'
-        optimizer = Adam(lr=self.config.train_learning_rate)
+        optimizer = Adam(self.config.train_learning_rate)
         super().prepare_for_training(optimizer=optimizer, **kwargs)
         self.config.train_loss = tmp
 
+        print(f'Using {self.config.train_loss} loss')
         if self.config.train_loss == "binary_crossentropy":
-            print("Using binary crossentropy loss")
-            loss = dice_bce(bce_weights=self.config.train_class_weight, dice_weight=1)
+            loss = weighted_bce(self.config.train_class_weight)
         elif self.config.train_loss == "categorical_crossentropy":
             loss = weighted_cce(self.config.train_class_weight)
+        elif self.config.train_loss == "dice_bce":
+            loss = dice_bce(bce_weights=self.config.train_class_weight, dice_weight=0.5)
+        elif self.config.train_loss == "dice_cce":
+            loss = dice_cce(self.config.train_class_weight, dice_weight=0.5)
         else:
             raise ValueError(f"Unknown loss function {self.config.train_loss}")
 
-        metrics = (metric_precision, metric_recall, metric_f1)
+        metrics = (metric_dice if self.config.n_channel_out == 1 else metric_dice_multi(self.config.n_dim))
+
         self.keras_model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
-    def train(self, X, Y, validation_data, data_gen=None, epochs=None, steps_per_epoch=None):
+    def train(self, X, Y, Xv, Yv, augmenter: Augmend = None, epochs=None, steps_per_epoch=None, care_tb_kwargs=None,
+              num_workers=4):
         """Train the neural network with the given data.
         Parameters
         ----------
@@ -204,50 +295,52 @@ class UNet(CARE):
         ``History`` object
             See `Keras training history <https://keras.io/models/model/#fit>`_.
         """
-        ((isinstance(validation_data, (list, tuple)) and len(validation_data) == 2)
-         or _raise(ValueError('validation_data must be a pair of numpy arrays')))
-
-        if data_gen is None:
-            n_train, n_val = len(X), len(validation_data[0])
-            frac_val = (1.0 * n_val) / (n_train + n_val)
-            frac_warn = 0.05
-            if frac_val < frac_warn:
-                warnings.warn("small number of validation images (only %.1f%% of all images)" % (100 * frac_val))
-
-            axes = axes_check_and_normalize('S' + self.config.axes, X.ndim)
-            ax = axes_dict(axes)
-            for a, div_by in zip(axes, self._axes_div_by(axes)):
-                n = X.shape[ax[a]]
-                if n % div_by != 0:
-                    raise ValueError(
-                        "training images must be evenly divisible by %d along axis %s"
-                        " (which has incompatible size %d)" % (div_by, a, n)
-                    )
+        for x, y in zip(X, Y):
+            check_shape(x, n_dim=self.config.n_dim, n_channels=self.config.n_channel_in)
+            check_shape(y, n_dim=self.config.n_dim, n_channels=self.config.n_channel_out)
+        for x, y in zip(Xv, Yv):
+            check_shape(x, n_dim=self.config.n_dim, n_channels=self.config.n_channel_in)
+            check_shape(y, n_dim=self.config.n_dim, n_channels=self.config.n_channel_out)
 
         if epochs is None:
             epochs = self.config.train_epochs
         if steps_per_epoch is None:
             steps_per_epoch = self.config.train_steps_per_epoch
 
+        self.data_train = DataWrapper(X, Y, self.config.train_batch_size, length=epochs * steps_per_epoch,
+                                      augmenter=augmenter, patch_size=self.config.patch_size)
+        self.data_val = DataWrapper(Xv, Yv, self.config.train_batch_size, length=len(Xv),
+                                    patch_size=self.config.patch_size)
+
         if not self._model_prepared:
             self.prepare_for_training()
 
+        xv, yv = next(iter(self.data_val))
+
         if (self.config.train_tensorboard and self.basedir is not None and
                 not IS_TF_1 and not any(isinstance(cb, CARETensorBoardImage) for cb in self.callbacks)):
-            self.callbacks.append(CARETensorBoardImage(model=self.keras_model, data=validation_data,
+            self.callbacks.append(CARETensorBoardImage(model=self.keras_model, data=(xv, yv),
                                                        log_dir=str(self.logdir / 'logs' / 'images'),
-                                                       n_images=3, prob_out=self.config.probabilistic))
-
-        if data_gen is None:
-            data_gen = train.DataWrapper(X, Y, self.config.train_batch_size, length=epochs * steps_per_epoch)
+                                                       n_images=3, prob_out=self.config.probabilistic,
+                                                       **({} if care_tb_kwargs is None else care_tb_kwargs)))
 
         fit = self.keras_model.fit_generator if IS_TF_1 else self.keras_model.fit
-        history = fit(iter(data_gen), validation_data=validation_data,
+        history = fit(iter(self.data_train), validation_data=(xv, yv),
                       epochs=epochs, steps_per_epoch=steps_per_epoch,
-                      callbacks=self.callbacks, verbose=1)
+                      callbacks=self.callbacks, verbose=1, workers=num_workers)
         self._training_finished()
 
         return history
+
+    @staticmethod
+    def _total_n_tiles(x, n_tiles, net_axes_in_overlaps, net_axes_in_div_by):
+        n_block_overlaps = [
+            int(np.ceil(1. * tile_overlap / block_size)) for tile_overlap, block_size in
+            zip(net_axes_in_overlaps, net_axes_in_div_by)
+        ]
+        return total_n_tiles(
+            x, n_tiles=n_tiles, block_sizes=net_axes_in_div_by, n_block_overlaps=n_block_overlaps, guarantee='size'
+        )
 
     def predict(self, img, axes, normalizer=PercentileNormalizer(), resizer=PadAndCropResizer(), n_tiles=None):
         """Apply neural network to raw image to predict restored image.
@@ -257,9 +350,9 @@ class UNet(CARE):
             Raw input image
         axes : str
             Axes of the input ``img``.
-        normalizer : :class:`csbdeep_unet_train.data.Normalizer` or None
+        normalizer : :class:`csbdeep.data.Normalizer` or None
             Normalization of input image before prediction and (potentially) transformation back after prediction.
-        resizer : :class:`csbdeep_unet_train.data.Resizer` or None
+        resizer : :class:`csbdeep.data.Resizer` or None
             If necessary, input image is resized to enable neural network prediction and result is (possibly)
             resized to yield original image size.
         n_tiles : iterable or None
@@ -304,14 +397,6 @@ class UNet(CARE):
         net_axes_in_overlaps = self._axes_tile_overlap(net_axes_in)
         self.config.n_channel_in == x.shape[channel_in] or _raise(ValueError())
 
-        # TODO: refactor tiling stuff to make code more readable
-
-        def _total_n_tiles(n_tiles):
-            n_block_overlaps = [int(np.ceil(1. * tile_overlap / block_size)) for tile_overlap, block_size in
-                                zip(net_axes_in_overlaps, net_axes_in_div_by)]
-            return total_n_tiles(x, n_tiles=n_tiles, block_sizes=net_axes_in_div_by, n_block_overlaps=n_block_overlaps,
-                                 guarantee='size')
-
         _permute_axes_n_tiles = self._make_permute_axes(img_axes_in, net_axes_in)
 
         # _permute_axes_n_tiles: (img_axes_in <-> net_axes_in) to convert n_tiles between img and net axes
@@ -352,7 +437,7 @@ class UNet(CARE):
         x = resizer.before(x, net_axes_in, net_axes_in_div_by)
 
         done = False
-        progress = Progress(_total_n_tiles(n_tiles), 1)
+        progress = Progress(self._total_n_tiles(x, n_tiles, net_axes_in_overlaps, net_axes_in_div_by), 1)
         c = 0
         while not done:
             try:
@@ -376,7 +461,7 @@ class UNet(CARE):
                     raise MemoryError(
                         "Giving up increasing number of tiles. Memory occupied by another process (notebook)?")
                 print('Out of memory, retrying with n_tiles = %s' % str(_permute_n_tiles(n_tiles, undo=True)))
-                progress.total = _total_n_tiles(n_tiles)
+                progress.total = self._total_n_tiles(x, n_tiles, net_axes_in_overlaps, net_axes_in_div_by)
                 c += 1
 
         n_channel_predicted = self.config.n_channel_out * (2 if self.config.probabilistic else 1)
@@ -386,3 +471,26 @@ class UNet(CARE):
 
         x = _permute_axes(x, undo=True)
         return x
+
+
+if __name__ == '__main__':
+    n_dim = 2
+
+    conf = UNetConfig(n_dim=n_dim,
+                      n_channel_in=1,
+                      n_channel_out=2,
+                      train_loss='dice_cce',
+                      train_class_weight=(1, 1))
+
+    # model = UNet(conf, None, None)
+    model = UNet(conf, 'foo')
+
+    # create random single channel binary output masks
+    Y = np.zeros((32,) + (128,) * n_dim + (2,), np.float32)
+    Y[:, 10:50, 10:50, 1:] = 1.
+    Y[:, ..., 0] = 1 - Y[:, ..., 1]
+
+    # and input 
+    X = .1 * Y[..., 1:] + .2 * np.random.normal(0, 1, Y[..., 1:].shape)
+
+    model.train(X, Y, X, Y, epochs=28, steps_per_epoch=16)

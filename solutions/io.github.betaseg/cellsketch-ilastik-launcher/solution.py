@@ -25,7 +25,7 @@ setup(
     title="ilastik-Launcher",
     description="An album solution to run ilastik",
     solution_creators=["Dominik Kutra", "Lucas Rieckert"],
-    cite=[{"text": "Berg, S., Kutra, D., Kroeger, T. et al. ilastik: interactive machine learning for (bio)image analysis. Nat Methods 16, 1226–1232 (2019).",
+    cite=[{"text": "Berg, S., Kutra, D., Kroeger, T. et al. ilastik: interactive machine learning for (bio)image analysis. Nat Methods 16, 1226-1232 (2019).",
            "url": "https://doi.org/10.1038/s41592-019-0582-9"}],
     covers=[{
         "description": "Logo of the ilastik suite.",
@@ -33,7 +33,7 @@ setup(
     }],
     documentation=["README.md"],
     tags=["ilastik", "machine learning", "interactive", "open source", "image segmentation", "imaging", "python", "qt"],
-    license="unlicense",
+    license="GNU General Public License version 2 or later with exception to allow non-GPL extensions",
     album_api_version="0.5.5",
     args=[],
     run=run,

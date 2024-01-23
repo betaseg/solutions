@@ -1,20 +1,32 @@
 album_api_version: 0.5.5
 args:
-- description: root folder of your models.
-  name: root
+- description: Folder name in which the model is stored.
+  name: model
   required: true
   type: string
-- description: file path to your input image. Should be a tif file.
-  name: fname_input
+- default: ''
+  description: min and max to use for normalization, if not given use 1st and 99.8th
+    percentile of each image
+  name: normalize_mi_ma
+  required: false
+  type: string
+- description: file path to your input image or folder. Should be tif file(s).
+  name: input
   required: true
   type: string
 - description: output folder
   name: outdir
   required: true
   type: string
+- default: ''
+  description: number of tiles per dimension to use for prediction (will be estimated
+    by default)
+  name: n_tiles
+  required: false
+  type: string
 changelog: null
 cite:
-- doi: "15.12 (2018): 1090\u20131097."
+- doi: '15.12 (2018): 1090-1097.'
   text: 'Weigert, Martin, et al. "Content-aware image restoration: pushing the limits
     of fluorescence microscopy." Nature methods 15.12 (2018): 1090-1097.'
 covers:
@@ -36,6 +48,6 @@ tags:
 - CSBDeep
 - Unet
 - predcit
-timestamp: '2023-06-26T12:16:14.052696'
+timestamp: '2023-12-28T20:34:15.064672'
 title: CSBDeep Unet Predict
 version: 0.1.0

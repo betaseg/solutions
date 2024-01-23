@@ -23,6 +23,6 @@ group: io.github.betaseg
 name: launch-blender
 solution_creators:
 - Deborah Schmidt
-timestamp: '2023-06-28T12:44:26.486942'
+timestamp: '2023-12-28T20:34:50.805729'
 title: Launch Blender 3.3.1
 version: 0.1.0

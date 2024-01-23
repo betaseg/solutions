@@ -22,19 +22,30 @@ args:
   name: patch_size
   required: false
   type: string
-- default: 3
+- default: 4
   description: 'The depth of the network. Default: 3'
   name: unet_n_depth
   required: false
   type: integer
-- default: 2,4,4
+- default: '2'
+  description: batch size to be used during training
+  name: batch_size
+  required: false
+  type: integer
+- default: ''
+  description: min and max to use for normalization, if not given use 1st and 99.8th
+    percentile of each image
+  name: normalize_mi_ma
+  required: false
+  type: string
+- default: 2,2,2
   description: The pool size of the network. Must be given as a string separated by
     ",". Should be as many numbers as unet is deep.
   name: unet_pool_size
   required: false
   type: string
-- default: 1,5
-  description: The weights for the binary cross entropy dice loss. First weight for
+- default: 1,1
+  description: The weights for the binary cross entropy loss part. First weight for
     negative class. Must be given as a string separated by ",".
   name: train_class_weight
   required: false
@@ -60,14 +71,25 @@ args:
   required: false
   type: integer
 - default: true
-  description: Whether to use gpu or not. Only enable if you have a GPU available
-    that is compatible with tensorflow 2.0.
-  name: use_gpu
+  description: Whether to use gpu for augmentations. Only enable if you have a GPU
+    available that is compatible with tensorflow 2.0.
+  name: use_gpu_for_aug
   required: false
   type: boolean
+- default: false
+  description: dry run (dont create any output files/folders)
+  name: dry
+  required: false
+  type: boolean
+- default: 4
+  description: 'Number of threads to use for training. On Windows, multiprocessing
+    will be deactivated. Default: 4'
+  name: num_workers
+  required: false
+  type: integer
 changelog: null
 cite:
-- doi: "15.12 (2018): 1090\u20131097."
+- doi: '15.12 (2018): 1090-1097.'
   text: 'Weigert, Martin, et al. "Content-aware image restoration: pushing the limits
     of fluorescence microscopy." Nature methods 15.12 (2018): 1090-1097.'
 covers:
@@ -88,6 +110,6 @@ tags:
 - CSBDeep
 - Unet
 - training
-timestamp: '2023-06-28T16:59:54.621200'
+timestamp: '2023-12-28T20:34:24.044312'
 title: CSBDeep Unet Train
 version: 0.1.0
