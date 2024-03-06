@@ -15,17 +15,19 @@ def install():
     shutil.copytree(get_package_path().joinpath('src'), get_app_path().joinpath('src'))
     shutil.copytree(get_package_path().joinpath('gradle'), get_app_path().joinpath('gradle'))
 
-    # compile app
     subprocess.run([(get_gradle_executable()), 'build', '-Dorg.gradle.internal.http.socketTimeout=300000'],
                    cwd=get_app_path(), check=True)
 
 
 def get_gradle_executable():
     from sys import platform
+    import os
     from album.runner.api import get_app_path
     if platform == "win32":
-        return get_app_path().joinpath('gradlew.bat')
-    return get_app_path().joinpath('gradlew')
+        return str(get_app_path().joinpath('gradlew.bat').absolute())
+    gradle_executable = str(get_app_path().joinpath('gradlew').absolute())
+    os.chmod(gradle_executable, 0o755)
+    return gradle_executable
 
 
 def run():
@@ -161,7 +163,7 @@ def is_file_arg(arg_name):
 setup(
     group="io.github.betaseg",
     name="cellsketch-analyze",
-    version="0.2.0",
+    version="0.2.1",
     solution_creators=["Deborah Schmidt"],
     title="CellSketch: Run spatial analysis",
     description="This solution performs spatial analysis for all organelles in a CellSketch project.",
