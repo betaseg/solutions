@@ -38,15 +38,13 @@ args:
   name: thresholdConnectionFilamentEnds
   required: false
   type: float
-changelog: 'Update CellSketch version
-
-  '
+changelog: Fix executable issue with gradlew
 cite:
 - doi: https://doi.org/10.1083/jcb.202010039
-  text: "A. M\xC3\xBCller, D. Schmidt, C. S. Xu, S. Pang, J. V. D'Costa, S. Kretschmar,\
-    \ C. M\xC3\xBCnster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D\
-    \ FIB-SEM reconstruction of microtubule-organelle interaction in whole primary\
-    \ mouse \xCE\xB2 cells. J Cell Biol 1 February 2021; 220 (2): e202010039."
+  text: "A. M\xFCller, D. Schmidt, C. S. Xu, S. Pang, J. V. D'Costa, S. Kretschmar,\
+    \ C. M\xFCnster, T. Kurth, F. Jug, M. Weigert, H. F. Hess, M. Solimena; 3D FIB-SEM\
+    \ reconstruction of microtubule-organelle interaction in whole primary mouse \u03B2\
+    \ cells. J Cell Biol 1 February 2021; 220 (2): e202010039."
 description: This solution adds a labelmap to an existing CellSketch project.
 group: io.github.betaseg
 name: cellsketch-add-labelmap
@@ -56,6 +54,6 @@ tags:
 - cellsketch
 - segmentation
 - annotation
-timestamp: '2024-01-03T19:16:00.579534'
+timestamp: '2024-03-06T16:33:42.882948'
 title: 'CellSketch: Add labelmap'
-version: 0.2.0
+version: 0.2.1
