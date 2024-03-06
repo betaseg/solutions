@@ -4,7 +4,6 @@ from album.runner.api import setup
 def install():
     import subprocess
     import shutil
-    import os
     from album.runner.api import get_app_path, get_package_path
 
     get_app_path().mkdir(exist_ok=True, parents=True)
@@ -16,18 +15,19 @@ def install():
     shutil.copytree(get_package_path().joinpath('src'), get_app_path().joinpath('src'))
     shutil.copytree(get_package_path().joinpath('gradle'), get_app_path().joinpath('gradle'))
 
-    gradle_executable = get_gradle_executable()
-    os.chmod(gradle_executable, 0o755)
-    subprocess.run([(gradle_executable), 'build', '-Dorg.gradle.internal.http.socketTimeout=300000'],
+    subprocess.run([(get_gradle_executable()), 'build', '-Dorg.gradle.internal.http.socketTimeout=300000'],
                    cwd=get_app_path(), check=True)
 
 
 def get_gradle_executable():
     from sys import platform
+    import os
     from album.runner.api import get_app_path
     if platform == "win32":
         return str(get_app_path().joinpath('gradlew.bat').absolute())
-    return str(get_app_path().joinpath('gradlew').absolute())
+    gradle_executable = str(get_app_path().joinpath('gradlew').absolute())
+    os.chmod(gradle_executable, 0o755)
+    return gradle_executable
 
 
 def run():
