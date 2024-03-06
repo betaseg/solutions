@@ -14,17 +14,19 @@ def install():
     shutil.copy(get_package_path().joinpath('gradlew.bat'), get_app_path())
     shutil.copytree(get_package_path().joinpath('src'), get_app_path().joinpath('src'))
     shutil.copytree(get_package_path().joinpath('gradle'), get_app_path().joinpath('gradle'))
-
     subprocess.run([(get_gradle_executable()), 'build', '-Dorg.gradle.internal.http.socketTimeout=300000'],
                    cwd=get_app_path(), check=True)
 
 
 def get_gradle_executable():
     from sys import platform
+    import os
     from album.runner.api import get_app_path
     if platform == "win32":
         return str(get_app_path().joinpath('gradlew.bat').absolute())
-    return str(get_app_path().joinpath('gradlew').absolute())
+    gradle_executable = str(get_app_path().joinpath('gradlew').absolute())
+    os.chmod(gradle_executable, 0o755)
+    return gradle_executable
 
 
 def run():
@@ -60,7 +62,7 @@ def is_file_arg(arg_name):
 setup(
     group="io.github.betaseg",
     name="cellsketch-create-project",
-    version="0.2.1",
+    version="0.2.2",
     solution_creators=["Deborah Schmidt"],
     title="CellSketch: Create new project",
     description="This solution creates a new CellSketch project by importing the raw dataset as well as masks and labelings of cell components.",
