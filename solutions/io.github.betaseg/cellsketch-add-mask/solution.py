@@ -21,10 +21,13 @@ def install():
 
 def get_gradle_executable():
     from sys import platform
+    import os
     from album.runner.api import get_app_path
     if platform == "win32":
         return str(get_app_path().joinpath('gradlew.bat').absolute())
-    return str(get_app_path().joinpath('gradlew').absolute())
+    gradle_executable = str(get_app_path().joinpath('gradlew').absolute())
+    os.chmod(gradle_executable, 0o755)
+    return gradle_executable
 
 
 def run():
@@ -60,7 +63,7 @@ def is_file_arg(arg_name):
 setup(
     group="io.github.betaseg",
     name="cellsketch-add-mask",
-    version="0.2.0",
+    version="0.2.1",
     solution_creators=["Deborah Schmidt"],
     title="CellSketch: Add mask",
     description="This solution adds a mask to an existing CellSketch project.",
