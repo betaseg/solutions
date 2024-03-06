@@ -4,6 +4,7 @@ from album.runner.api import setup
 def install():
     import subprocess
     import shutil
+    import os
     from album.runner.api import get_app_path, get_package_path
 
     get_app_path().mkdir(exist_ok=True, parents=True)
@@ -15,7 +16,9 @@ def install():
     shutil.copytree(get_package_path().joinpath('src'), get_app_path().joinpath('src'))
     shutil.copytree(get_package_path().joinpath('gradle'), get_app_path().joinpath('gradle'))
 
-    subprocess.run([(get_gradle_executable()), 'build', '-Dorg.gradle.internal.http.socketTimeout=300000'],
+    gradle_executable = get_gradle_executable()
+    os.chmod(gradle_executable, 0o755)
+    subprocess.run([gradle_executable, 'build', '-Dorg.gradle.internal.http.socketTimeout=300000'],
                    cwd=get_app_path(), check=True)
 
 
@@ -60,7 +63,7 @@ def is_file_arg(arg_name):
 setup(
     group="io.github.betaseg",
     name="cellsketch-add-filament-knossos",
-    version="0.1.0",
+    version="0.1.1",
     solution_creators=["Deborah Schmidt"],
     title="CellSketch: Add KNOSSOS filament",
     description="This solution adds a KNOSSOS filament XML file to an existing CellSketch project.",
