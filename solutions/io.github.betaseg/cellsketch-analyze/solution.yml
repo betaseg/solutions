@@ -16,7 +16,7 @@ args:
   description: Threads to use to calculate the distance transform maps.
   name: num_threads
   type: integer
-changelog: Fix executable issue with gradlew
+changelog: Fix issue when not all components of project exist
 cite:
 - doi: https://doi.org/10.1083/jcb.202010039
   text: "A. M\xFCller, D. Schmidt, C. S. Xu, S. Pang, J. V. D'Costa, S. Kretschmar,\
@@ -44,6 +44,6 @@ tags:
 - segmentation
 - annotation
 - analysis
-timestamp: '2024-03-06T21:38:59.563153'
+timestamp: '2024-03-18T13:57:07.265027'
 title: 'CellSketch: Run spatial analysis'
-version: 0.2.1
+version: 0.2.2

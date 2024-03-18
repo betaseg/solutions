@@ -73,10 +73,18 @@ def calculate_edt(project, skip_existing_distance_maps, num_threads):
 
     project_file = z5py.File(str(project))
     project_name = Path(project).name.rstrip(".n5")
-    masks = project_file.attrs['masks']
-    labelmaps = project_file.attrs['labelmaps']
-    filaments = project_file.attrs['filaments']
-    cell_bounds = project_file.attrs['cellbounds']
+    masks = {}
+    labelmaps = {}
+    filaments = {}
+    cell_bounds = {}
+    if 'labelmaps' in project_file.attrs:
+        labelmaps = project_file.attrs['labelmaps']
+    if 'masks' in project_file.attrs:
+        masks = project_file.attrs['masks']
+    if 'filaments' in project_file.attrs:
+        filaments = project_file.attrs['filaments']
+    if 'cell_bounds' in project_file.attrs:
+        cell_bounds = project_file.attrs['cellbounds']
     to_be_processed = []
     to_be_processed_inverted = []
 
@@ -163,7 +171,7 @@ def is_file_arg(arg_name):
 setup(
     group="io.github.betaseg",
     name="cellsketch-analyze",
-    version="0.2.1",
+    version="0.2.2",
     solution_creators=["Deborah Schmidt"],
     title="CellSketch: Run spatial analysis",
     description="This solution performs spatial analysis for all organelles in a CellSketch project.",
